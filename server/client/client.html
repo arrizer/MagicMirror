@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Magic Mirror</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <script type="text/javascript" src="/prefixfree.min.js"></script>
+    <script type="text/javascript" src="/jquery.min.js"></script>
+    <script type="text/javascript" src="/prefixfree.jquery.js"></script>
+    {{#widgets}}
+    <!-- {{name}} -->
+    <script type="text/plain" id="widget_{{name}}_template">{{template}}</script>
+    <script type="application/json" id="widget_{{name}}_strings">{{strings}}</script>
+    {{/widgets}}
+    <script type="application/json" id="widget_instances">{{widget_instances}}</script>
+    <script type="application/json" id="config">{{config}}</script>
+    <script type="text/javascript" src="/client.js"></script>
+  </head>
+  <div id="dashboard"></div>
+</html>

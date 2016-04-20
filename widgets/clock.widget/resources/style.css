@@ -1,0 +1,11 @@
+.clock {
+  text-align: center;
+}
+
+.clock .time {
+  font-size: 80px;
+}
+
+.clock .date {
+  font-size: 40px;
+}

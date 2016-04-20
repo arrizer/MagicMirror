@@ -1,0 +1,26 @@
+
+@font-face {
+  font-family: "San Francisco";
+  font-weight: 400;
+  src: url("/san-francisco.woff");
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  cursor: default;  
+}
+
+html {
+  padding: 0;
+  margin: 0;
+  background-color: black;
+  color: white;
+  font-family: "San Francisco";
+  font-size: 20px;
+}
+
+.widget {
+  margin: 10px;
+}
