@@ -1,0 +1,10 @@
+{
+  "en" : {
+    "news.empty"       : "No news",
+    "news.loading"     : "Loading news..."
+  },
+  "de" : {
+    "news.empty"       : "Keine Nachrichten",
+    "news.loading"     : "Nachrichten werden geladen..."
+  }
+}

@@ -1,0 +1,26 @@
+.weather .container {
+  text-align: center;
+}
+
+.weather .container .day {
+  display: inline-block;
+  width: 150px;
+}
+
+.weather .container .day .icon {
+  width: 100px;
+  margin: 10px 0;
+}
+
+.weather .container .day .name {
+
+}
+
+.weather .container .day .temperatureMax {
+  font-size: 30px;
+}
+
+.weather .container .day .temperatureMin {
+  font-size: 20px;
+  color: #888;
+}

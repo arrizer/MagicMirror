@@ -78,7 +78,6 @@ module.exports = class Widget
     FileSystem.stat path, (error, stats) =>
       unless error?
         @router.use '/resources', Static(path)
-      console.log error
       next()
 
   createServerFactory: (next) ->

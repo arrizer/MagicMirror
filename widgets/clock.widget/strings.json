@@ -1,11 +1,9 @@
 {
-  "en" : 
-  {
+  "en" : {
     "format.date"       : "dddd MMMM D",
     "format.time"       : "HH:mm"
   },
-  "de" : 
-  {
+  "de" : {
     "format.date"       : "dddd, D. MMMM"
   }
 }

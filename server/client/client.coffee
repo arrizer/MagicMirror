@@ -46,7 +46,7 @@ $ ->
             dataType: 'json'
             data: data
       widgetFactories[instance.widget](widget)
-      widget.init (=>)
+      widget.init()
       @widgets.push widget
   
   instances = JSON.parse(decode $('#widget_instances').text())

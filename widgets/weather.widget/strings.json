@@ -1,0 +1,10 @@
+{
+  "en" : {
+    "unit.temperature.si": "°C",
+    "unit.temperature.us": "°F",
+    "loading": "Loading weather data..."
+  },
+  "de" : {
+    "loading": "Wetterdaten werden geladen..."
+  }
+}

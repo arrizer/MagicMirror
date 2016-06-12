@@ -1,8 +1,41 @@
 (widget) ->
-  widget.init = (next) ->
-    widget.div.text("Loading...")
-    widget.load 'greet', (name: 'Didder'), (error, response) ->
-      if error?
-        widget.div.text 'Error: ' + error
+  widget.init = ->
+    articles = []
+    nextArticle = 0
+    headline = widget.div.find('.headline')
+    headline.css 
+      'font-size': '30px'
+      'text-align': 'center'
+      'text-color': '#888'
+    
+    proceed = -> 
+      if nextArticle >= articles.length
+        update ->
+          nextArticle = 0
+          if articles.length is 0
+            headline.css 'text-color', '#888'
+            headline.text widget.string('news.empty')
+            setTimeout proceed, 1000
+          else
+            proceed()
       else
-        widget.div.text response
+        headline.fadeOut(1000)
+        index = nextArticle
+        setTimeout ->
+          headline.text articles[index].title
+          headline.fadeIn(1000)          
+          headline.css 'text-color', '#888'
+        , 1000
+        nextArticle++
+        setTimeout (-> proceed()), 5000
+    
+    update = (next) ->
+      widget.load 'articles', (name: 'Didder'), (error, response) ->
+        if error?
+          headline.text 'Error: ' + error
+        else
+          articles = response
+        next()
+    
+    headline.text widget.string('news.loading')
+    proceed()

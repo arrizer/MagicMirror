@@ -38,9 +38,9 @@ module.exports = class WidgetRuntime
         @router.use '/' + widget.info.name, widget.router
       next()
   
-  startWidgets: (@config, next) ->
+  startWidgets: (config, next) ->
     counter = 1
-    Async.eachSeries @config, (config, next) =>
+    Async.eachSeries config, (config, next) =>
       widget = @widgets[config.widget]
       if widget?
         instance = widget.instantiate(config.config, counter++)
