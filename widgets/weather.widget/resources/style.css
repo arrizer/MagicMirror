@@ -8,8 +8,8 @@
 }
 
 .weather .container .day .icon {
-  width: 100px;
-  margin: 10px 0;
+  width: 75px;
+  margin: 5px 0;
 }
 
 .weather .container .day .name {
