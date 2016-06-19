@@ -1,0 +1,8 @@
+{
+  "en" : {
+    "loading": "Loading departures..."
+  },
+  "de" : {
+    "loading": "Abfhartszeiten werden geladen..."
+  }
+}
