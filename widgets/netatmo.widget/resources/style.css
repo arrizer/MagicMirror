@@ -1,0 +1,55 @@
+.netatmo .container {
+  text-align: center;
+}
+
+.netatmo .station {
+  
+}
+
+.netatmo .device {
+  display: inline-block;
+  width: 300px;
+  height: 100%;
+  vertical-align: top;
+  text-align: left;
+  margin: 0 10px;
+}
+
+.netatmo .device .name {
+  font-size: 20px;
+  color: #888;
+}
+
+.netatmo .temperature_outdoor {
+  font-size: 60px;
+}
+
+.netatmo .temperature_indoor {
+  font-size: 60px;
+}
+
+.netatmo .secondary {
+  position: relative;
+  font-size: 20px;
+  height: 25px;
+  vertical-align: middle;
+  padding: 2px 0;
+}
+
+.netatmo .secondary .icon {
+  height: 20px;
+  width: 20px;
+  margin-top: 3px;
+  display: inline-block;
+  float: left;
+  opacity: 0.5;
+}
+
+.netatmo .secondary .value {
+  display: inline-block;
+  padding: 0 5px;
+}
+
+.netatmo .secondary .unit {
+
+}
