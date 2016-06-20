@@ -6,6 +6,7 @@ module.exports = (server) =>
         
   server.handle 'stations', (query, respond, fail) ->
     netatmo.getDevicelist (error, devices, modules) ->
+      return fail(error) if error?
       devices = devices.filter (device) ->
         server.config.stations.indexOf(device.station_name) isnt -1
       stations = devices.map (device) ->

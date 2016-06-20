@@ -11,23 +11,30 @@
     refresh = ->
       widget.load 'stations', (error, stations) ->
         container.empty()
+        if error?
+          container.text(error)
+          return
         for station in stations
           device = station.device
           stationDiv = $('<div/>').addClass('station').appendTo(container)
           deviceDiv = $('<div/>').addClass('device').appendTo(stationDiv)
-          $('<span/>').addClass('name').text(device.station_name + ' ' + device.module_name).appendTo(deviceDiv)
-          $('<div/>').addClass('temperature_indoor').text(device.dashboard_data.Temperature + ' °C').appendTo(deviceDiv)
-          addSecondary(deviceDiv, 'humidity', device.dashboard_data.Humidity, '%')
-          addSecondary(deviceDiv, 'pressure', device.dashboard_data.Pressure, 'mBar')
-          addSecondary(deviceDiv, 'co2', device.dashboard_data.CO2, 'ppm')
-          addSecondary(deviceDiv, 'noise', device.dashboard_data.Noise, 'db')
+          leftDiv = $('<div/>').addClass('page').appendTo(deviceDiv)
+          rightDiv = $('<div/>').addClass('page').appendTo(deviceDiv)
+          $('<span/>').addClass('name').text(device.station_name + ' ' + device.module_name).appendTo(leftDiv)
+          $('<div/>').addClass('temperature_indoor').text(device.dashboard_data.Temperature + ' °C').appendTo(leftDiv)
+          addSecondary(rightDiv, 'humidity', device.dashboard_data.Humidity, '%')
+          addSecondary(rightDiv, 'pressure', device.dashboard_data.Pressure, 'mBar')
+          addSecondary(rightDiv, 'co2', device.dashboard_data.CO2, 'ppm')
+          addSecondary(rightDiv, 'noise', device.dashboard_data.Noise, 'db')
           for module in station.modules
             moduleDiv = $('<div/>').addClass('device').appendTo(stationDiv)
-            $('<span/>').addClass('name').text(module.module_name).appendTo(moduleDiv)
+            leftDiv = $('<div/>').addClass('page').appendTo(moduleDiv)
+            rightDiv = $('<div/>').addClass('page').appendTo(moduleDiv)
+            $('<span/>').addClass('name').text(module.module_name).appendTo(leftDiv)
             if module.type is 'NAModule1'
               # Outdoor module
-              $('<div/>').addClass('temperature_outdoor').text(module.dashboard_data.Temperature + ' °C').appendTo(moduleDiv)
-              addSecondary(moduleDiv, 'humidity', module.dashboard_data.Humidity, '%')
+              $('<div/>').addClass('temperature_outdoor').text(module.dashboard_data.Temperature + ' °C').appendTo(leftDiv)
+              addSecondary(rightDiv, 'humidity', module.dashboard_data.Humidity, '%')
 
     container.text widget.string("loading")
     setInterval ->

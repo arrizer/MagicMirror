@@ -15,7 +15,11 @@ $ ->
       widget =
         div: template
         update: (next) -> next()
-        string: (key) -> strings[key]
+        string: (key, placeholders...) -> 
+          string = strings[key]
+          index = 1
+          string = string.replace '%' + index, placeholder for placeholder in placeholders
+          return string
         config: instance.config
         globalConfig: JSON.parse(decode $('#config').text())
         load: (endpoint, data, next) ->

@@ -3,12 +3,17 @@
 }
 
 .netatmo .station {
-  
+
+}
+
+.netatmo .page {
+  width: 50%;
+  float: left;
 }
 
 .netatmo .device {
   display: inline-block;
-  width: 300px;
+  width: 400px;
   height: 100%;
   vertical-align: top;
   text-align: left;

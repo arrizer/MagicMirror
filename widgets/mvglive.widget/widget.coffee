@@ -4,6 +4,9 @@
     refresh = ->
       widget.load 'departures', (error, responses) ->
         container.empty()
+        if error?
+          container.text(error)
+          return
         for response in responses
           board = $('<div></div>').addClass('station').appendTo(container)
           $('<div></div>').addClass('name').text(response.station).appendTo(board)
@@ -36,5 +39,5 @@
     container.text widget.string("loading")
     setInterval ->
       refresh()
-    , (1000 * 10)
+    , (1000 * 30)
     refresh()

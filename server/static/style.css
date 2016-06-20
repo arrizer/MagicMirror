@@ -29,3 +29,7 @@ html {
   border-image: linear-gradient(to right, #000 0%, #888 50%, #000 100%);
   border-image-slice: 1;
 }
+
+.widget:last-child {
+  border-bottom: 0;
+}

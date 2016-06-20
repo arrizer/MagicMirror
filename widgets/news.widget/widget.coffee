@@ -25,7 +25,7 @@
           headline.text articles[index].title
           headline.fadeIn(1000)          
           headline.css 'text-color', '#888'
-        , 1000
+        , 990
         nextArticle++
         setTimeout (-> proceed()), 5000
     
