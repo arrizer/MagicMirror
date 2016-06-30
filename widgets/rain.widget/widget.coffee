@@ -24,10 +24,10 @@
           setState('clear', widget.string('clear'))
         else if response.state is 'predicted-begin'
           key = INTENSITY_KEYS[response.intensity]
-          setState(key, widget.string('predicted-begin', widget.string(key), response.minutes))
+          setState(key, widget.string('predicted-begin', widget.string(key), response.minutes.toString()))
         else if response.state is 'predicted-end'
           key = INTENSITY_KEYS[response.intensity]
-          setState('end', widget.string('predicted-end', widget.string(key), response.minutes))
+          setState('end', widget.string('predicted-end', widget.string(key), response.minutes.toString()))
         else if response.state is 'raining'
           setState('raining', widget.string('raining', widget.string(INTENSITY_KEYS[response.intensity])))
   
