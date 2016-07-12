@@ -1,0 +1,10 @@
+.things .container {
+  text-align: center;
+}
+
+.things .container .todo {
+  font-size: 30px;
+  text-align: left;
+  display: inline-block;
+  margin: 0 20px;
+}
