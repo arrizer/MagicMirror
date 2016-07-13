@@ -24,7 +24,7 @@
         for icon in animatedIcons
           skycons.remove(icon[0])
         animatedIcons = []
-        for day in response.daily.data[1 .. ]
+        for day in response.daily.data[ .. 6]
           date = window.moment(new Date(day.time * 1000))
           div = $('<div></div>')
           div.addClass 'day'

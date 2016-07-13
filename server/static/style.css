@@ -26,7 +26,7 @@ html {
   box-sizing: border-box;
   border: 0;
   border-bottom: 1px solid #eee;
-  border-image: linear-gradient(to right, #000 0%, #888 50%, #000 100%);
+  -webkit-border-image: linear-gradient(to right, #000 0%, #888 50%, #000 100%);
   border-image-slice: 1;
 }
 
