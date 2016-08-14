@@ -3,5 +3,7 @@
 killall chromium
 killall node
 
-coffee /home/pi/Projects/MagicMirror/app.coffee 2>&1 > /dev/null &
+cd /home/pi/Projects/MagicMirror/
+pm2 stop app.coffee
+pm2 start app.coffee
 sleep 15 && chromium --kiosk "http://localhost:8080" 2>&1 > /dev/null &
