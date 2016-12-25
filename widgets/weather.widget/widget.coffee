@@ -19,17 +19,23 @@
     
     refresh = ->
       widget.load 'forecast', (error, response) ->
-        return if error?
+        if error?
+          container.text(error.toString())
+          return
         container.empty()
         for icon in animatedIcons
           skycons.remove(icon[0])
         animatedIcons = []
+        dayIndex = 0
         for day in response.daily.data[ .. 6]
           date = window.moment(new Date(day.time * 1000))
           div = $('<div></div>')
           div.addClass 'day'
           append = (cssclass, text) -> div.append $('<div></div>').addClass(cssclass).text(text)            
-          append 'name', date.format('dddd')
+          dayName = date.format('dddd')
+          dayName = widget.string('today') if dayIndex is 0
+          dayName = widget.string('tomorrow') if dayIndex is 1
+          append 'name', dayName
           icon = $('<canvas></canvas>').addClass('icon')
           div.append icon
           skycons.add(icon[0], icons[day.icon])
@@ -37,10 +43,11 @@
           append 'temperatureMax', Math.round(day.temperatureMax) + ' ' + widget.string('unit.temperature.' + response.flags.units)
           append 'temperatureMin', Math.round(day.temperatureMin) + ' ' + widget.string('unit.temperature.' + response.flags.units)
           container.append(div)
+          dayIndex++
         skycons.play()
     
     container.text widget.string('loading')    
     refresh()
     setInterval ->
       refresh()
-    , (1000 * 60)
+    , (1000 * 60 * 10)

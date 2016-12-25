@@ -2,9 +2,13 @@
   "en" : {
     "unit.temperature.si": "°C",
     "unit.temperature.us": "°F",
-    "loading": "Loading weather data..."
+    "loading": "Loading weather data...",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
   },
   "de" : {
-    "loading": "Wetterdaten werden geladen..."
+    "loading": "Wetterdaten werden geladen...",
+    "today": "Heute",
+    "tomorrow": "Morgen"
   }
 }
