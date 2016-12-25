@@ -8,7 +8,7 @@ module.exports = (server) =>
   addArticle = (article) ->
     for existingArticle in articles
       return if existingArticle.permalink is article.permalink
-    articles.push article
+    articles.push (title: article.title)
     articles.shift() while articles.length > 6
   
   updateFeeds = ->
@@ -17,7 +17,7 @@ module.exports = (server) =>
         encoding: null
       parser = FeedParser()
       
-      server.log.debug 'Loafing articles from feed "%s"', feed
+      server.log.debug 'Loading articles from feed "%s"', feed
       request.on 'error', (error) ->
         server.log.error 'Failed to update articles on "%s": %s', feed, error
       request.on 'response', (response) ->
@@ -31,7 +31,7 @@ module.exports = (server) =>
     
   server.init = (next) ->
     updateFeeds()
-    #setTimeout updateFeeds, 30000
+    setTimeout(updateFeeds, 1000 * 60 * 5)
     next()
     
   server.handle 'articles', (query, respond, error) ->

@@ -27,7 +27,7 @@
           headline.css 'text-color', '#888'
         , 990
         nextArticle++
-        setTimeout (-> proceed()), 5000
+        setTimeout (-> proceed()), 7000
     
     update = (next) ->
       widget.load 'articles', (name: 'Didder'), (error, response) ->
