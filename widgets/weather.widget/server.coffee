@@ -12,4 +12,5 @@ module.exports = (server) =>
       json: yes
     Request request, (error, response, body) ->
       return fail(error) if error?
+      return fail("HTTP #{response.statusCode}: #{body}") unless response.statusCode is 200
       respond(body)
