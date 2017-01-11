@@ -8,9 +8,10 @@ module.exports = (server) =>
     
   server.handle 'forecast', (query, respond, fail) ->
     request =
-      url: "https://api.forecast.io/forecast/#{server.config.forecast_api_key}/#{server.config.latitude},#{server.config.longitude}?units=#{server.config.units}"
+      url: "http://api.wunderground.com/api/#{server.config.wunderground_api_key}/geolookup/conditions/forecast10day/q/#{server.config.country}/#{server.config.city}.json"
       json: yes
     Request request, (error, response, body) ->
       return fail(error) if error?
-      return fail("HTTP #{response.statusCode}: #{body}") unless response.statusCode is 200
+      return fail("Wunderground API Error: #{response.error.description}") if response.error?
+      body.units = server.config.units
       respond(body)

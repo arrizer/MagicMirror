@@ -1,7 +1,7 @@
 {
   "en" : {
-    "unit.temperature.si": "°C",
-    "unit.temperature.us": "°F",
+    "unit.temperature.celsius": "°C",
+    "unit.temperature.fahrenheit": "°F",
     "loading": "Loading weather data...",
     "today": "Today",
     "tomorrow": "Tomorrow"
