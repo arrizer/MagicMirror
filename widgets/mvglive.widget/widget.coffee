@@ -32,9 +32,10 @@
             times = group.times.map (time) ->
               return Math.round((new Date(parseInt(time)) - new Date()) / (1000.0 * 60.0))
             departureDiv = $('<div></div>').addClass('departure').appendTo(board)
-            $('<span></span>').addClass('line').text(group.line).appendTo(departureDiv).css('opacity', (if previousLine is group.line then '0' else '1'))
+            lineContainer = $('<div></div>').addClass('lineContainer').appendTo(departureDiv)
+            $('<span></span>').addClass('line').text(group.line).appendTo(lineContainer).css('opacity', (if previousLine is group.line then '0' else '1'))
             $('<span></span>').addClass('destination').text(group.destination).appendTo(departureDiv)
-            $('<span></span>').addClass('time').text(times[0..1].join(', ') + ' Min').appendTo(departureDiv)
+            $('<span></span>').addClass('time').text(times[0..2].join(', ') + ' Min').appendTo(departureDiv)
             previousLine = group.line
     container.text widget.string("loading")
     setInterval ->

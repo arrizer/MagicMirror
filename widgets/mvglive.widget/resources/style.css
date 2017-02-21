@@ -4,7 +4,7 @@
 }
 
 .mvglive .station {
-  width: 400px;
+  width: 450px;
   height: 100%;
   vertical-align: top;
   display: inline-block;
@@ -15,6 +15,7 @@
 .mvglive .station .name {
   font-size: 20px;
   color: #888;
+  margin-left: 50px;
 }
 
 .mvglive .station .departure {
@@ -23,8 +24,12 @@
   position: relative;
 }
 
+.mvglive .station .departure .lineContainer {
+  width: 50px;
+}
+
 .mvglive .station .departure .line {
-  float: left;
+  float: right;
   font-size: 25px;
   background-color: white;
   border-radius: 4px;
@@ -36,6 +41,7 @@
 .mvglive .station .departure .destination {
   float: none;
   font-size: 25px;
+  margin-left: 50px;
 }
 
 .mvglive .station .departure .time {

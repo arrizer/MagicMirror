@@ -1,9 +1,11 @@
 {
   "en" : {
     "loading": "Rain prediction is loading...",
-    "clear": "No rain expected for the next hour",
+    "clear": "No rain expected",
     "predicted-begin": "%1 begins in %2 minutes",
+    "predicted-begin-immediate": "%1 begins now",
     "predicted-end": "%1 ends in %2 minutes",
+    "predicted-end-immediate": "%1 ends now",
     "raining": "%1 for the hour",
     "intensity-light": "Light rain",
     "intensity-medium": "Medium rain",
@@ -11,9 +13,11 @@
   },
   "de" : {
     "loading": "Regenvorhersage wird geladen...",
-    "clear": "Kein Regen erwartet in der nächsten Stunde",
+    "clear": "Kein Regen erwartet",
     "predicted-begin": "%1 beginnt in %2 Minuten",
+    "predicted-begin-immediate": "%1 beginnt jetzt",
     "predicted-end": "%1 endet in %2 Minuten",
+    "predicted-end-immediate": "%1 endet jetzt",
     "raining": "%1 in der nächsten Stunde",
     "intensity-light": "Leichter Regen",
     "intensity-medium": "Mittelstarker Regen",
