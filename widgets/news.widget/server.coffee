@@ -8,8 +8,12 @@ module.exports = (server) =>
   addArticle = (article) ->
     for existingArticle in articles
       return if existingArticle.permalink is article.permalink
-    articles.push (title: article.title)
-    articles.shift() while articles.length > 6
+    articles.push (title: article.title, pubdate: article.pubdate, permalink: article.permalink)
+    articles.sort (a,b) ->
+      return -1 if a.pubdate > b.pubdate
+      return 1 if a.pubdate < b.pubdate
+      return 0
+    articles.shift() while articles.length > 10
   
   updateFeeds = ->
     for feed in server.config.feeds
@@ -31,7 +35,7 @@ module.exports = (server) =>
     
   server.init = (next) ->
     updateFeeds()
-    setTimeout(updateFeeds, 1000 * 60 * 5)
+    setInterval (=> updateFeeds()), (1000 * 60 * 5)
     next()
     
   server.handle 'articles', (query, respond, error) ->
