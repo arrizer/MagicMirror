@@ -2,6 +2,8 @@
 
 A web based information radiator software for your magic mirror wall poject.
 
+![Screenshot](https://raw.github.com/arrizer/MagicMirror/master/screenshot.png)
+
 This node.js project provides a simple black and white webpage interface that you can run on a RaspberryPi, hooked up to a display inside a home-made magic mirror project (display behind a semi-transparent glass front). It is configurable with widgets that are displayed from top to bottom.
 
 ## Installation
