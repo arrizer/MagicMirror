@@ -16,7 +16,7 @@
     refresh = ->  
       widget.load 'rainforecast', (error, response) ->
         container.css(opacity: '1')
-        immediate = if response.minutes? and response.minutes <= response.minutes <= 1 then '-immediate' else ''
+        immediate = if response.minutes? and response.minutes <= 1 then '-immediate' else ''
         if error?
           status.text(error)
           return
@@ -25,10 +25,10 @@
           setState('clear', widget.string('clear'))
         else if response.state is 'predicted-begin'
           key = INTENSITY_KEYS[response.intensity]
-          setState(key, widget.string('predicted-begin', widget.string(key + immediate), response.minutes.toString()))
+          setState(key, widget.string('predicted-begin' + immediate, widget.string(key), response.minutes.toString()))
         else if response.state is 'predicted-end'
           key = INTENSITY_KEYS[response.intensity]
-          setState('end', widget.string('predicted-end', widget.string(key + immediate), response.minutes.toString()))
+          setState('end', widget.string('predicted-end' + immediate, widget.string(key), response.minutes.toString()))
         else if response.state is 'raining'
           key = INTENSITY_KEYS[response.intensity]
           setState(key, widget.string('raining', widget.string(key)))

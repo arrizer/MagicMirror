@@ -103,6 +103,11 @@ class WidgetInstance
       config: @config
       handle: (endpoint, handler) =>
         @endpoints[endpoint] = handler
+      string: (key, placeholders...) => 
+        string = @widget.strings[key]
+        index = 1
+        string = string.replace '%' + index++, placeholder for placeholder in placeholders
+        return string
       init: (next) ->
         next()
     try

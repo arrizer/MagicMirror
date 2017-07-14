@@ -1,0 +1,57 @@
+{
+  "port": 8080,
+  "language": "en",
+  "widgets": [
+    {
+      "widget": "clock",
+      "config" : {
+        "locale": "en"
+      }
+    },
+    { 
+      "widget": "news",
+      "config": {
+        "feeds" : [
+          "http://www.spiegel.de/schlagzeilen/tops/index.rss"
+        ]
+      }
+    },
+    {
+      "widget": "netatmo",
+      "config": {
+        "auth": {
+          "client_id": "xxxxxxxxx",
+          "client_secret": "xxxxxxxxx",
+          "username": "your@email.com",
+          "password": "xxxxxxxxxx"
+        },
+        "stations": ["Home"]
+      }
+    },
+    {
+      "widget": "rain",
+      "config": {
+        "latitude": 48.1234,
+        "longitude": 11.1234
+      }
+    },
+    {
+      "widget": "weather",
+      "config": {
+        "wunderground_api_key": "xxxxxxxxx",
+        "country": "Germany",
+        "city": "Munich",
+        "units": "celsius"
+      }
+    },
+    {
+      "widget": "mvglive",
+      "config": {
+        "mvglive_api_key": "xxxxxxxxx",
+        "stations": [
+          "Marienplatz"
+        ]
+      }
+    }
+  ]
+}
