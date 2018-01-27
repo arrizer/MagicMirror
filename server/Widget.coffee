@@ -1,7 +1,7 @@
 FileSystem = require 'fs'
 Path = require 'path'
 Express = require 'express'
-CoffeeScript = require 'coffee-script'
+CoffeeScript = require 'coffeescript'
 Static       = require 'serve-static'
 
 log = require './Log'

@@ -2,7 +2,7 @@ FileSystem = require 'fs'
 Path = require 'path'
 Async = require 'async'
 Express = require 'express'
-CoffeeScript = require 'coffee-script'
+CoffeeScript = require 'coffeescript'
 Widget = require './Widget'
 
 log = require './Log'

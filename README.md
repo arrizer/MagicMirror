@@ -10,7 +10,7 @@ This node.js project provides a simple black and white webpage interface that yo
 
 You need node.js, and the npm dendency manager (comes with node.js) installed. Read a tutorial for your platform for details. After you have node.js installed and checked-out this git repository, install coffee-script globally by running:
 
-`npm -g i coffee-script`
+`npm -g i coffeescript`
 
 then, cd into the git repository and run:
 
