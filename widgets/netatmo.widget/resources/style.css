@@ -6,14 +6,13 @@
 
 }
 
-.netatmo .page {
-  width: 50%;
+.netatmo .metrics {
   float: left;
 }
 
 .netatmo .device {
   display: inline-block;
-  width: 450px;
+  width: 300px;
   height: 100%;
   vertical-align: top;
   text-align: left;
@@ -33,15 +32,17 @@
   font-size: 60px;
 }
 
-.netatmo .secondary {
+.netatmo .metric {
+  float: left;
   position: relative;
   font-size: 20px;
   height: 25px;
   vertical-align: middle;
   padding: 2px 0;
+  margin-right: 12px;
 }
 
-.netatmo .secondary .icon {
+.netatmo .metric .icon {
   height: 20px;
   width: 20px;
   margin-top: 3px;
@@ -50,11 +51,11 @@
   opacity: 0.5;
 }
 
-.netatmo .secondary .value {
+.netatmo .metric .value {
   display: inline-block;
   padding: 0 5px;
 }
 
-.netatmo .secondary .unit {
+.netatmo .metric .unit {
 
 }

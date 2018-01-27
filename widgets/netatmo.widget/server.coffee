@@ -16,4 +16,5 @@ module.exports = (server) =>
           device: device
           modules: modules
         return station
+      console.log stations[0].modules
       respond(stations)

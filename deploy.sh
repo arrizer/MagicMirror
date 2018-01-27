@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ssh pi@magicmirror.local "cd /home/pi/Projects/MagicMirror; git pull; ./startup.sh"
+ssh pi@magicmirror.local "cd /home/pi/MagicMirror; git pull; scp matthias@saturn.local:/Users/matthias/Documents/Projects/MagicMirror/config.json .; ./startup.sh"
