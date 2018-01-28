@@ -48,4 +48,11 @@ module.exports = (server) =>
           stations.push
             name: module.module_name
             metrics: metricsFromDashboardData(module.dashboard_data)
+      if server.config.modules?
+        result = []
+        for name in server.config.modules
+          for station in stations
+            if station.name is name
+              result.push(station)
+        stations = result
       respond(stations)

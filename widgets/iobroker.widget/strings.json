@@ -1,0 +1,12 @@
+{
+  "en" : {
+    "loading": "Loading...",
+    "openWindows.allClosed": "All windows closed",
+    "openWindows.open": "%1 open"
+  },
+  "de" : {
+    "loading": "Wird geladen...",
+    "openWindows.allClosed": "Alle Fenster geschlossen",
+    "openWindows.open": "%1 offen"
+  }
+}

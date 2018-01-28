@@ -95,11 +95,15 @@ module.exports = class Widget
 class WidgetInstance
   constructor: (@widget, @config, id) ->
     @id = @widget.info.name + '/' + id
+    logPrefix = @id
     log.debug 'Creating widget instance %s', @id
     @endpoints = {}
     @router = Express.Router()
     @server =
-      log: log
+      log:
+        debug: (message) -> log.debug("#{logPrefix}: #{message}")
+        info: (message) -> log.info("#{logPrefix}: #{message}")
+        error: (message) -> log.error("#{logPrefix}: #{message}")
       config: @config
       handle: (endpoint, handler) =>
         @endpoints[endpoint] = handler
@@ -133,7 +137,7 @@ class WidgetInstance
       @router.get '/' + endpoint, (req, res) =>
         log.debug 'Incoming endpoint request for %s, parameters:', path, req.query
         onResult = (result) -> 
-          log.debug "Responding to %s with response:", path, JSON.stringify(result, null, 2)
+          log.debug "Responding to %s with response:\n%s", path, JSON.stringify(result, null, 2)
           res.json (success: yes, response: result)
         onError = (error) -> 
           log.error 'Responding to %s with error:', path, error

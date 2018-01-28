@@ -1,0 +1,22 @@
+.iobroker .container {
+  text-align: center;
+}
+
+.iobroker .view {
+  display: inline-block;
+  text-align: center;
+}
+
+.iobroker .openWindows .item {
+  display: inline-block;
+  float: left;
+}
+
+.iobroker .openWindows .icon {
+  display: inline-block;
+  float: left;
+  width: 26px;
+  height: 26px;
+  margin-right: 10px;
+  margin-top: -3px;
+}
