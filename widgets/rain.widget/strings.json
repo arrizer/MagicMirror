@@ -13,7 +13,7 @@
   },
   "de" : {
     "loading": "Regenvorhersage wird geladen...",
-    "clear": "Kein Regen erwartet",
+    "clear": "Kein Regen in der nächsten Stunde erwartet",
     "predicted-begin": "%1 beginnt in %2 Minuten",
     "predicted-begin-immediate": "%1 beginnt jetzt",
     "predicted-end": "%1 endet in %2 Minuten",

@@ -20,8 +20,13 @@
         if error?
           status.text(error)
           return
+
         if response.state is 'clear'
-          container.css(opacity: '0.5')
+          widget.div.hide()
+        else
+          widget.div.show()
+
+        if response.state is 'clear'
           setState('clear', widget.string('clear'))
         else if response.state is 'predicted-begin'
           key = INTENSITY_KEYS[response.intensity]
