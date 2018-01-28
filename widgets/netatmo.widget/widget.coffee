@@ -7,6 +7,11 @@
       $('<img/>').addClass('icon').attr('src', '/netatmo/resources/' + icon + '.png').appendTo(secondaryDiv)
       $('<span/>').addClass('value').text(value).appendTo(secondaryDiv)
       $('<span/>').addClass('unit').text(unit).appendTo(secondaryDiv)
+
+    icons =
+      'Humidity': 'humidity'
+      'Noise': 'noise'
+      'Pressure': 'pressure'
     
     refresh = ->
       widget.load 'stations', (error, stations) ->
@@ -15,31 +20,22 @@
           container.text(error)
           return
         for station in stations
-          device = station.device
           stationDiv = $('<div/>').addClass('station').appendTo(container)
-          deviceDiv = $('<div/>').addClass('device').appendTo(stationDiv)
-          leftDiv = $('<div/>').appendTo(deviceDiv)
-          metricsDiv = $('<div/>').addClass('metrics').appendTo(deviceDiv)
-          $('<span/>').addClass('name').text(device.module_name).appendTo(leftDiv)
-          $('<div/>').addClass('temperature_indoor').text(device.dashboard_data.Temperature + ' °C').appendTo(leftDiv)
-          addMetric(metricsDiv, 'humidity', device.dashboard_data.Humidity, '%')
-          #addMetric(metricsDiv, 'pressure', device.dashboard_data.Pressure, 'mBar')
-          addMetric(metricsDiv, 'co2', device.dashboard_data.CO2, 'ppm')
-          addMetric(metricsDiv, 'noise', device.dashboard_data.Noise, 'db')
-          for module in station.modules
-            moduleDiv = $('<div/>').addClass('device').appendTo(stationDiv)
-            leftDiv = $('<div/>').addClass('page').appendTo(moduleDiv)
-            metricsDiv = $('<div/>').addClass('page').appendTo(moduleDiv)
-            $('<span/>').addClass('name').text(module.module_name).appendTo(leftDiv)
-            if module.type is 'NAModule1'
-              # Outdoor module
-              $('<div/>').addClass('temperature_outdoor').text(module.dashboard_data.Temperature + ' °C').appendTo(leftDiv)
-              addMetric(metricsDiv, 'humidity', module.dashboard_data.Humidity, '%')
-            else if module.type is 'NAModule4'
-              # Additional Indoor module
-              $('<div/>').addClass('temperature_indoor').text(module.dashboard_data.Temperature + ' °C').appendTo(leftDiv)
-              addMetric(metricsDiv, 'humidity', module.dashboard_data.Humidity, '%')
-              addMetric(metricsDiv, 'co2', module.dashboard_data.CO2, 'ppm')
+          metricsDiv = $('<div/>').addClass('metrics')
+          $('<span/>').addClass('name').text(station.name).appendTo(stationDiv)
+          for metric in station.metrics
+            if metric.type is 'Temperature'
+              $('<div/>').addClass('temperature').text(metric.value + ' °C').appendTo(stationDiv)
+            else
+              metricDiv = $('<div/>').addClass('metric').appendTo(metricsDiv)
+              icon = icons[metric.type]
+              if icon?
+                $('<img/>').addClass('icon').attr('src', "/netatmo/resources/#{icon}.png").appendTo(metricDiv)
+              if metric.quality?
+                $('<div/>').addClass('quality').addClass(metric.quality).appendTo(metricDiv)
+              $('<span/>').addClass('value').text(metric.value).appendTo(metricDiv)
+              $('<span/>').addClass('unit').text(metric.unit).appendTo(metricDiv)
+          metricsDiv.appendTo(stationDiv)
 
     container.text widget.string("loading")
     setInterval ->

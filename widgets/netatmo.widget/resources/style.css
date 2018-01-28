@@ -2,15 +2,11 @@
   text-align: center;
 }
 
-.netatmo .station {
-
-}
-
 .netatmo .metrics {
   float: left;
 }
 
-.netatmo .device {
+.netatmo .station {
   display: inline-block;
   width: 300px;
   height: 100%;
@@ -19,16 +15,12 @@
   margin: 0 10px;
 }
 
-.netatmo .device .name {
+.netatmo .station .name {
   font-size: 20px;
-  color: #888;
+  color: #AAA;
 }
 
-.netatmo .temperature_outdoor {
-  font-size: 60px;
-}
-
-.netatmo .temperature_indoor {
+.netatmo .temperature {
   font-size: 60px;
 }
 
@@ -43,12 +35,37 @@
 }
 
 .netatmo .metric .icon {
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: 16px;
   margin-top: 3px;
   display: inline-block;
   float: left;
-  opacity: 0.5;
+}
+
+.netatmo .metric .quality {
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  float: left;
+  margin-top: 3px;
+  border-radius: 8px;
+  filter: blur(5px);
+}
+
+.netatmo .metric .quality.good {
+  background-color: #a9ff9e;
+}
+
+.netatmo .metric .quality.fair {
+  background-color: #fffc60;
+}
+
+.netatmo .metric .quality.inferior {
+  background-color: #ff9b28;
+}
+
+.netatmo .metric .quality.bad {
+  background-color: #ff5151;
 }
 
 .netatmo .metric .value {
