@@ -21,14 +21,14 @@ module.exports = (server) =>
         encoding: null
       parser = FeedParser()
       
-      server.log.debug 'Loading articles from feed "%s"', feed
+      server.log.debug "Loading articles from feed #{feed}"
       request.on 'error', (error) ->
-        server.log.error 'Failed to update articles on "%s": %s', feed, error
+        server.log.error "Failed to update articles on '#{feed}': #{error}"
       request.on 'response', (response) ->
         return server.log.error 'Error %s for feed "%s"', response.statusCode, feed if response.statusCode isnt 200
         @pipe parser
       parser.on 'error', (error) ->
-        server.log.error 'Failed to parse articles on "%s": %s', feed, error
+        server.log.error "Failed to parse articles on '#{feed}': #{error}"
       parser.on 'readable', ->
         while item = @read()
           addArticle item
