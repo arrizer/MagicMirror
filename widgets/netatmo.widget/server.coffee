@@ -25,7 +25,7 @@ module.exports = (server) =>
           metric.quality = 'good'
         else if value <= 1000
           metric.quality = 'fair'
-        else if value <= 1300
+        else if value <= 1500
           metric.quality = 'inferior'
         else
           metric.quality = 'bad'
