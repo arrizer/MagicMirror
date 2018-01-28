@@ -25,7 +25,7 @@
           $('<span/>').addClass('name').text(station.name).appendTo(stationDiv)
           for metric in station.metrics
             if metric.type is 'Temperature'
-              $('<div/>').addClass('temperature').text(metric.value + ' °C').appendTo(stationDiv)
+              $('<div/>').addClass('temperature').text(Math.round(metric.value) + ' °C').appendTo(stationDiv)
             else
               metricDiv = $('<div/>').addClass('metric').appendTo(metricsDiv)
               icon = icons[metric.type]

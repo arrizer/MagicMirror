@@ -12,7 +12,7 @@ module.exports = (server) =>
     'Pressure': 'mBar'
 
   metricsFromDashboardData = (data) ->
-    keys = ['Temperature', 'CO2', 'Humidity', 'Noise']
+    keys = ['Temperature', 'CO2', 'Humidity']
     metrics = []
     for key in keys when data[key]?
       value = data[key]
