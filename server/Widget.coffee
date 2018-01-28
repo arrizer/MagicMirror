@@ -133,7 +133,7 @@ class WidgetInstance
       @router.get '/' + endpoint, (req, res) =>
         log.debug 'Incoming endpoint request for %s, parameters:', path, req.query
         onResult = (result) -> 
-          log.debug "Responding to %s with response:", path, result
+          log.debug "Responding to %s with response:", path, JSON.stringify(result, null, 2)
           res.json (success: yes, response: result)
         onError = (error) -> 
           log.error 'Responding to %s with error:', path, error
