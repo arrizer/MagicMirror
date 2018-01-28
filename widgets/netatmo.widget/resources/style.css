@@ -2,10 +2,6 @@
   text-align: center;
 }
 
-.netatmo .metrics {
-  float: left;
-}
-
 .netatmo .station {
   display: inline-block;
   width: 300px;
@@ -20,11 +16,15 @@
   color: #AAA;
 }
 
-.netatmo .temperature {
+.netatmo .station .temperature {
   font-size: 60px;
 }
 
-.netatmo .metric {
+.netatmo .station .metrics {
+  float: left;
+}
+
+.netatmo .station .metric {
   float: left;
   position: relative;
   font-size: 20px;
@@ -34,7 +34,7 @@
   margin-right: 12px;
 }
 
-.netatmo .metric .icon {
+.netatmo .station .metric .icon {
   height: 16px;
   width: 16px;
   margin-top: 3px;
@@ -42,7 +42,7 @@
   float: left;
 }
 
-.netatmo .metric .quality {
+.netatmo .station .metric .quality {
   height: 16px;
   width: 16px;
   display: inline-block;
