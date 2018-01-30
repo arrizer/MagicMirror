@@ -1,0 +1,8 @@
+.birthdays .container {
+  text-align: center;
+}
+
+.birthdays .birthday {
+  display: inline-block;
+  width: 250px;
+}
