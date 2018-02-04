@@ -8,6 +8,7 @@ FileSystem   = require 'fs'
 Hogan        = require 'hogan-express'
 
 WidgetRuntime = require './WidgetRuntime'
+DisplayController = require './DisplayController'
 
 log = require './Log'
 
@@ -31,6 +32,7 @@ module.exports = class Server
     @app = app
   
   start: (next) ->
+    @displayController = new DisplayController()
     @runtime = new WidgetRuntime(Path.join(@config.path, 'widgets'), Path.join(@config.path, 'server', 'client', 'client.coffee'), @config)
     @runtime.load =>
       @runtime.startWidgets @config.widgets, (error) =>
@@ -39,6 +41,7 @@ module.exports = class Server
           next error if next?
         else
           @app.use @runtime.router
+          @app.use @displayController.router
           @startServer next
         
   startServer: (next) ->
