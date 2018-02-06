@@ -6,6 +6,7 @@ module.exports = (server) =>
   log = server.log
   config = server.config
 
+  hasInitialData = no
   birthdays = []
 
   loadVCards = (next) ->
@@ -54,6 +55,7 @@ module.exports = (server) =>
       next null, contacts
 
   refresh = ->
+    log.info "Refreshing contacts..."
     loadContacts (error, contacts) ->
       birthdays = []
       for contact in contacts
@@ -74,14 +76,21 @@ module.exports = (server) =>
           birthday.age = age if age?
           birthdays.push(birthday)
         else
-          log.info("Contact '#{contact.name}' has no birthday")
+          log.info("Contact '#{contact.name}' has no birthday") unless hasInitialData
       birthdays.sort (a,b) ->
         return -1 if a.days < b.days
         return 1 if a.days > b.days
         return 0
       log.info "Refresh complete. #{birthdays.length} birthdays found"
+      hasInitialData = yes
 
   refresh()
 
+  setInterval (-> refresh()), (1000 * 60 * 5)
+
   server.handle 'birthdays', (query, respond, fail) ->
-    respond(birthdays)
+    upcomingBirthdays = birthdays.filter((birthday) -> birthday.days <= config.daysAhead)
+    response =
+      hasInitialData: hasInitialData
+      birthdays: upcomingBirthdays
+    respond(response)

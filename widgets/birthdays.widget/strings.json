@@ -1,8 +1,10 @@
 {
   "en" : {
-    "loading": "Loading..."
+    "daysAhead": "in %1 days",
+    "tomorrow": "tomorrow"
   },
   "de" : {
-    "loading": "Wird geladen..."
+    "daysAhead": "in %1 Tagen",
+    "tomorrow": "morgen"
   }
 }
