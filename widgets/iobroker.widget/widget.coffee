@@ -9,7 +9,12 @@
           windows.push(name) if isOpen
         windows.sort()
         if windows.length > 0
-          text = widget.string("openWindows.open", windows.join(", "))
+          text = ""
+          if windows.length >= 2
+            text = "#{windows[ .. windows.length - 2].join(", ")} #{widget.string("openWindows.open.and")} #{windows[windows.length - 1]}"
+          else
+            text = windows[0]
+          text = widget.string("openWindows.open", text)
           $('<img/>').addClass('icon').attr('src', '/iobroker/resources/open-window.png').appendTo(div)
           $('<div/>').addClass('item').text(text).appendTo(div)
         else
