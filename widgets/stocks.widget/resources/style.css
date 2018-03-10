@@ -1,0 +1,41 @@
+.stocks .container {
+  text-align: center;
+}
+
+.stocks .item {
+  display: inline-block;
+  text-align: left;
+  margin-right: 20px;
+}
+
+.stocks .item .title {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.stocks .item .quote {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.stocks .item .quote.trend_up {
+  color: #9ef442;
+}
+
+.stocks .item .quote.trend_down {
+  color: red;
+}
+
+.stocks .item .quote .trend {
+  display: inline-block;
+}
+
+.stocks .item .quote .change {
+  display: inline-block;
+}
+
+.stocks .item .quote .range {
+  font-size: 13px;
+  margin-top: 5px;
+  color: #AAA;
+}

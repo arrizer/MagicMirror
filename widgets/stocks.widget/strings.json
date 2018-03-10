@@ -1,0 +1,16 @@
+{
+  "en" : {
+    "loading": "Loading...",
+    "quote.1day": "today",
+    "quote.1month": "30 days",
+    "quote.6months": "6 months",
+    "quote.1year": "1 year"
+  },
+  "de" : {
+    "loading": "Wird geladen...",
+    "quote.1day": "heute",
+    "quote.1month": "30 Tage",
+    "quote.6months": "6 Monate",
+    "quote.1year": "1 Jahr"
+  }
+}
