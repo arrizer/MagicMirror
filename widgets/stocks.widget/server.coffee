@@ -27,6 +27,7 @@ module.exports = (server) =>
   server.handle 'quotes', (query, respond, fail) ->
     ranges = [
       (key: '1day', range: '1d', interval: '1m'),
+      (key: '5days', range: '5d', interval: '1m'),
       (key: '1month', range: '1mo', interval: '1d'),
       (key: '1year', range: '1y', interval: '1d')
     ]
@@ -38,7 +39,7 @@ module.exports = (server) =>
           roundedChange = Math.round(chart.changePercentage * 100) / 100
           result =
             range: range.key
-            change: "#{roundedChange}#{if (roundedChange * 100) % 10 >= 1 then '' else '0'} %"
+            change: parseFloat(Math.round(roundedChange * 100) / 100).toFixed(2) + ' %'
             trend: if chart.changePercentage >= 0 then 'up' else 'down'
           done(null, result)
       , (error, results) ->
