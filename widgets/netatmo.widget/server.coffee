@@ -21,11 +21,11 @@ module.exports = (server) =>
         value: value
         unit: units[key]
       if key is 'CO2'
-        if value <= 700
+        if value <= 1000
           metric.quality = 'good'
-        else if value <= 1000
-          metric.quality = 'fair'
         else if value <= 1500
+          metric.quality = 'fair'
+        else if value <= 2000
           metric.quality = 'inferior'
         else
           metric.quality = 'bad'
