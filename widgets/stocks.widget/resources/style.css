@@ -28,6 +28,7 @@
 
 .stocks .item .quote .trend {
   display: inline-block;
+  margin-right: 5px;
 }
 
 .stocks .item .quote .change {
@@ -35,7 +36,7 @@
 }
 
 .stocks .item .quote .range {
-  font-size: 13px;
+  font-size: 15px;
   margin-top: 5px;
   color: #AAA;
 }
