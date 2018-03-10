@@ -32,6 +32,18 @@ module.exports = (server) =>
       metrics.push(metric)
     return metrics
 
+  stationFromObject = (object) ->
+    moduleConfig = null
+    for config in server.config.modules
+      if config.module is object.module_name
+        moduleConfig = config
+    return null unless moduleConfig?
+    station =
+      module: object.module_name
+      name: moduleConfig.title
+      metrics: metricsFromDashboardData(object.dashboard_data)
+    return station
+
   server.handle 'stations', (query, respond, fail) ->
     netatmo.getDevicelist (error, devices, modules) ->
       return fail(error) if error?
@@ -39,20 +51,18 @@ module.exports = (server) =>
       return fail("No devices found") if devices.length == 0
       stations = []
       for device in devices
-        stations.push
-          name: device.module_name
-          metrics: metricsFromDashboardData(device.dashboard_data)
+        station = stationFromObject(device)
+        stations.push(station) if station?
         modules = modules.filter (module) ->
           device.modules.indexOf(module._id) isnt -1
         for module in modules
-          stations.push
-            name: module.module_name
-            metrics: metricsFromDashboardData(module.dashboard_data)
-      if server.config.modules?
-        result = []
-        for name in server.config.modules
-          for station in stations
-            if station.name is name
-              result.push(station)
-        stations = result
+          station = stationFromObject(module)
+          stations.push(station) if station?
+      orderedStations = []
+      console.log stations
+      for moduleConfig in server.config.modules
+        for station in stations
+          if station.module is moduleConfig.module
+            orderedStations.push(station)
+      stations = orderedStations
       respond(stations)

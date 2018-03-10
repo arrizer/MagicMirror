@@ -34,7 +34,13 @@
           "username": "your@email.com",
           "password": "xxxxxxxxxx"
         },
-        "stations": ["Home"]
+        "stations": [
+          "Station Name"
+        ],
+        "modules": [
+          {"module": "Module 1", "title": "Room Name 1"},
+          {"module": "Module 2", "title": "Room Name 2"}
+        ]
       }
     },
     {

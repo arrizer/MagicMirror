@@ -26,7 +26,7 @@ The server supports several widgets, all of them need to be configured inside a 
 - `language`: The language used by all widgets (currently `en` and `de` are supported)
 - `widgets`: An array of objects that configure individual widgets that are displayed from top to bottom. Each widget has a `widget` key that declares the widget's name and a `config` key that contains more widget-specific configuration. See below for details.
 
-Currently the following widgets are supported:
+## Widgets
 
 ### Clock
 
@@ -61,7 +61,10 @@ Configuration keys:
     - `client_secret`: Client secret of your netatmo app
     - `username`: Username of you netatmo account
     - `password`: Password of your netatmo acocunt
-- `stations`: Array of strings that is used to filter the netatmo base stations that are displayed, if your accounts contains more than one
+- `stations`: Array of strings that is used to filter the netatmo base stations that are displayed
+- `modules`: Array of objects, each having 2 keys:
+	- `module`: The module name of the netatmo module
+	- `title`: The title that is used in the dashboard UI
 
 ### Rain
 
@@ -87,6 +90,16 @@ Configuration keys:
 - `country`: Full name of the country of the city for which you whish to display weather forecast
 - `units`: Choose between `"celsius"` or `"fahrenheit"` for temperature units
 
+### Stocks
+
+Displays current prices of stocks and other financial instruments from Yahoo! finance.
+
+Configuration keys:
+
+- `quotes`: Array of objects with the following keys:
+  - `symbol`: A stock symbol (search at finance.yahoo.com to)
+  - `title`: A title that is displayed 
+
 ### MVG Live
 
 Real-time public transport departures for munich (MVG stations only). Displays U-Bahn, S-Bahn, Tram and Bus departures in real-time for all MVG stations (see http://www.mvg-live.de/). You need to obtain an API keys. Unfortunately there is no way to register directly, but you can ask MVG for a key via e-mail.
@@ -97,6 +110,28 @@ Configuration keys:
 
 - `mvglive_api_key`: API key for MVG live API
 - `stations`: Array of strings with station names. Make sure the spelling matches exactly the spelling from the website
+
+### ioBroker
+
+Display information about home automation devices from io.broker (http://www.iobroker.net)
+
+The widget architecture supports multiple views. Currenlty only one view is implemented.
+
+Configuration keys:
+
+- `baseURL`: Base URL of the iobroker server
+- `views`: Array of objects, each having
+   - `view`: The name of the view
+   - additional keys based on the view type
+
+#### View: openWindows
+
+Displays a list of open windows (if any). A window is represented by a boolean  iobroker state with true == closed, false == open.
+
+Configuration: 
+
+- `objects`: Object mapping from titles to iobroker states (e.g. `{"Window Name": "full.state.identifier"}`)
+
 
 ## Deployment
 
