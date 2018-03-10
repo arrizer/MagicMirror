@@ -8,6 +8,15 @@
         "locale": "en"
       }
     },
+    {
+      "widget": "birthdays",
+      "config": {
+        "server": "https://mycarddavserver.com/card.php",
+        "username": "xxxxxx",
+        "password": "xxxxxx",
+        "daysAhead": 0
+      }
+    },
     { 
       "widget": "news",
       "config": {
@@ -45,11 +54,37 @@
       }
     },
     {
+      "widget": "stocks",
+      "config": {
+        "quotes": [
+          {
+            "symbol": "AAPL",
+            "title": "Apple"
+          }
+        ]
+      }
+    },
+    {
       "widget": "mvglive",
       "config": {
         "mvglive_api_key": "xxxxxxxxx",
         "stations": [
           "Marienplatz"
+        ]
+      }
+    },
+    {
+      "widget": "iobroker",
+      "config": {
+        "baseURL": "http://myserver.local:8888",
+        "views": [
+          {
+            "view": "openWindows",
+            "objects": {
+              "Door 1": "xxx",
+              "Door 2": "yyy"
+            }
+          }
         ]
       }
     }
