@@ -10,16 +10,21 @@ module.exports = (server) =>
       qs:
         range: range
         interval: interval
-        includePrePost: yes
+        includePrePost: no
       json: yes
     Request request, (error, _, response) ->
       return next(error) if error?
       response = response.chart
       return next(new Error("Yahoo Finance API Error: #{response.error.code}: #{response.error.description}")) if response.error?
-      quote = response.result[0].indicators.quote[0]
+      result = response.result[0]
+      previousClose = result.meta.previousClose
+      quote = result.indicators.quote[0]
+      openPrices = quote.open.filter((v) -> v?)
+      closePrices = quote.close.filter((v) -> v?)
       chart =
-        priceOpen: quote.open[0]
-        priceClose: quote.close[quote.close.length - 1]
+        priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
+        priceClose: closePrices[closePrices.length - 1]
+      console.log symbol, range, chart
       chart.changePercentage = ((chart.priceClose / chart.priceOpen) - 1) * 100
       console.log chart
       next(null, chart)
@@ -28,8 +33,7 @@ module.exports = (server) =>
     ranges = [
       (key: '1day', range: '1d', interval: '1m'),
       (key: '5days', range: '5d', interval: '1m'),
-      (key: '1month', range: '1mo', interval: '1d'),
-      (key: '1year', range: '1y', interval: '1d')
+      (key: '1month', range: '1mo', interval: '1d')
     ]
     Async.map server.config.quotes, (quote, done) ->
       log.info "Loading stock quote for #{quote.title} [#{quote.symbol}]"
@@ -40,6 +44,8 @@ module.exports = (server) =>
           result =
             range: range.key
             change: parseFloat(Math.round(roundedChange * 100) / 100).toFixed(2) + ' %'
+            open: chart.priceOpen
+            close: chart.priceClose
             trend: if chart.changePercentage >= 0 then 'up' else 'down'
           done(null, result)
       , (error, results) ->
