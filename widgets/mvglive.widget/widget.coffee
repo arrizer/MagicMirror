@@ -36,7 +36,15 @@
             lineContainer = $('<div></div>').addClass('lineContainer').appendTo(departureDiv)
             $('<span></span>').addClass('line').text(group.line).appendTo(lineContainer).css('opacity', (if previousLine is group.line then '0' else '1'))
             $('<span></span>').addClass('destination').text(group.destination).appendTo(departureDiv)
-            $('<span></span>').addClass('time').text(times[0..2].join(', ') + ' Min').appendTo(departureDiv)
+            timesDiv = $('<span></span>').addClass('times').appendTo(departureDiv)
+            firstTime = yes
+            for time in times[0..2]
+              $('<span></span>').addClass('time').text(', ').appendTo(timesDiv) unless firstTime
+              minutesEl = $('<span></span>').addClass('time').text(time).appendTo(timesDiv)
+              if time <= response.walkingDistanceMinutes
+                minutesEl.addClass('critical')
+              firstTime = no
+            $('<span></span>').addClass('time').addClass('minutes').text(' Min').appendTo(timesDiv)
             previousLine = group.line
         setTimeout (-> refresh()), (1000 * 30)
     container.text widget.string("loading")

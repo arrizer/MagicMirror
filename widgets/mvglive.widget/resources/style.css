@@ -44,10 +44,18 @@
   margin-left: 50px;
 }
 
-.mvglive .station .departure .time {
+.mvglive .station .departure .times {
   float: right;
   font-size: 25px;
   white-space: nowrap;
   position: absolute;
   right: 0;
+}
+
+.mvglive .station .departure .times .time.critical {
+  color: yellow;
+}
+
+.mvglive .station .departure .times .time.minutes {
+  color: #888;
 }
