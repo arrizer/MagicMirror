@@ -23,7 +23,7 @@
 }
 
 .stocks .item .quote.trend_down {
-  color: red;
+  color: #ff6842;
 }
 
 .stocks .item .quote .trend {
