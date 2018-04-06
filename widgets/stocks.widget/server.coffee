@@ -24,9 +24,7 @@ module.exports = (server) =>
       chart =
         priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
         priceClose: closePrices[closePrices.length - 1]
-      console.log symbol, range, chart
       chart.changePercentage = ((chart.priceClose / chart.priceOpen) - 1) * 100
-      console.log chart
       next(null, chart)
 
   server.handle 'quotes', (query, respond, fail) ->
