@@ -8,7 +8,7 @@
     "predicted-end-immediate": "%1 ends now",
     "raining": "%1 for the hour",
     "intensity-light": "Light rain",
-    "intensity-medium": "Medium rain",
+    "intensity-medium": "Rain",
     "intensity-heavy": "Heavy rain"
   },
   "de" : {
@@ -20,7 +20,7 @@
     "predicted-end-immediate": "%1 endet jetzt",
     "raining": "%1 in der nächsten Stunde",
     "intensity-light": "Leichter Regen",
-    "intensity-medium": "Mittelstarker Regen",
+    "intensity-medium": "Regen",
     "intensity-heavy": "Starker Regen"
   }
 }
