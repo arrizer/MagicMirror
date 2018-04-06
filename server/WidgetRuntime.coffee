@@ -52,35 +52,37 @@ module.exports = class WidgetRuntime
     , (error) =>
       @mount() unless error?
       next error
+
+  compileClientScript: (next) ->
+    FileSystem.readFile @clientScriptPath, (error, data) =>
+      return next(error) if error?
+      script = "var widgetFactories = {};\n"
+      for name,widget of @widgets
+        script += 'widgetFactories["' + name + '"] = ' + widget.clientScript + ";\n"
+      try
+        script += CoffeeScript.compile data.toString(), (header:no, bare:yes)
+      catch error
+        return next(error)
+      next(null, script)
       
   mount: ->
     @router.get '/', (req, res) =>
-      instances = []
-      widgets = []
-      for instance in @widgetInstances
-        instances.push
-          widget: instance.widget.info.name
-          instanceID: instance.id
-          config: instance.config
-      for name,widget of @widgets
-        widgets.push
-          name: name
-          template: widget.template
-          strings: (if widget.strings? then JSON.stringify(widget.strings) else '{}')
-      res.render 'client',
-        widgets: widgets
-        widget_instances: JSON.stringify(instances)
-        config: JSON.stringify(@config)
-        
-    @router.get '/client.js', (req,res) =>
-      FileSystem.readFile @clientScriptPath, (error, data) =>
-        return res.status(500).send error if error?
-        script = "var widgetFactories = {};\n"
+      @compileClientScript (error, clientScript) =>
+        return res.status(500).send(error) if error?
+        instances = []
+        widgets = []
+        for instance in @widgetInstances
+          instances.push
+            widget: instance.widget.info.name
+            instanceID: instance.id
+            config: instance.config
         for name,widget of @widgets
-          script += 'widgetFactories["' + name + '"] = ' + widget.clientScript + ";\n"
-        try
-          script += CoffeeScript.compile data.toString(), (header:no, bare:yes)
-        catch error
-          return res.status(500).send error
-        res.set 'Content-Type', 'application/javascript'
-        res.send script
+          widgets.push
+            name: name
+            template: widget.template
+            strings: (if widget.strings? then JSON.stringify(widget.strings) else '{}')
+        res.render 'client',
+          widgets: widgets
+          widget_instances: JSON.stringify(instances)
+          config: JSON.stringify(@config)
+          client: clientScript
