@@ -19,6 +19,7 @@
         immediate = if response.minutes? and response.minutes <= 1 then '-immediate' else ''
         if error?
           status.text(error)
+          setTimeout (-> refresh()), 1000
           return
 
         if response.state is 'clear'
@@ -37,9 +38,7 @@
         else if response.state is 'raining'
           key = INTENSITY_KEYS[response.intensity]
           setState(key, widget.string('raining', widget.string(key)))
+        setTimeout (-> refresh()), 1000 * 60
   
     status.text widget.string('loading')    
     refresh()
-    setInterval ->
-      refresh()
-    , (1000 * 60)

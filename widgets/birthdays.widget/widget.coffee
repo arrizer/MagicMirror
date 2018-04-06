@@ -8,6 +8,7 @@
         if error?
           widget.div.show()
           container.text(error)
+          setTimeout (-> refresh()), 1000
           return
         unless response.hasInitialData
           widget.div.hide()

@@ -6,6 +6,7 @@
         container.empty()
         if error?
           container.text(error)
+          setTimeout (-> refresh()), 1000
           return
         for response in responses
           board = $('<div></div>').addClass('station').appendTo(container)
@@ -37,8 +38,6 @@
             $('<span></span>').addClass('destination').text(group.destination).appendTo(departureDiv)
             $('<span></span>').addClass('time').text(times[0..2].join(', ') + ' Min').appendTo(departureDiv)
             previousLine = group.line
+        setTimeout (-> refresh()), (1000 * 30)
     container.text widget.string("loading")
-    setInterval ->
-      refresh()
-    , (1000 * 30)
     refresh()

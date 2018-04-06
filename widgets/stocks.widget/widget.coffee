@@ -7,6 +7,7 @@
         container.empty()
         if error?
           container.text(error)
+          setTimeout (-> refresh()), 1000
           return
         for item in items
           itemEl = $('<div>').addClass('item').appendTo(container)
@@ -18,9 +19,7 @@
             $('<div>').addClass('trend').text(if quote.trend is 'up' then '▲' else '▼').appendTo(quoteEl)
             $('<div>').addClass('change').text(quote.change).appendTo(quoteEl)
             $('<div>').addClass('range').text(widget.string("quote.#{quote.range}")).appendTo(quoteEl)
+        setTimeout (-> refresh()), (1000 * 60 * 5)
 
     container.text widget.string("loading")
-    setInterval ->
-      refresh()
-    , (1000 * 60 * 5)
     refresh()
