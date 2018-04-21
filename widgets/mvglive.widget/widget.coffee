@@ -46,6 +46,7 @@
               firstTime = no
             $('<span></span>').addClass('time').addClass('minutes').text(' Min').appendTo(timesDiv)
             previousLine = group.line
-        setTimeout (-> refresh()), (1000 * 30)
+
     container.text widget.string("loading")
+    setInterval (-> refresh()), (1000 * 15)
     refresh()
