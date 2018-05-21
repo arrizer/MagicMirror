@@ -19,8 +19,11 @@ module.exports = (server) =>
       result = response.result[0]
       previousClose = result.meta.previousClose
       quote = result.indicators.quote[0]
-      openPrices = quote.open.filter((v) -> v?)
-      closePrices = quote.close.filter((v) -> v?)
+      openPrices = [if previousClose? then previousClose else 0]
+      closePrices = [if previousClose? then previousClose else 0]
+      if quote.open? and quote.close?
+        openPrices = quote.open.filter((v) -> v?)
+        closePrices = quote.close.filter((v) -> v?)
       chart =
         priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
         priceClose: closePrices[closePrices.length - 1]
@@ -37,7 +40,7 @@ module.exports = (server) =>
       log.info "Loading stock quote for #{quote.title} [#{quote.symbol}]"
       Async.map ranges, (range, done) ->
         loadChart quote.symbol, range.range, range.interval, (error, chart) ->
-          return next(error) if error?
+          return done(error) if error?
           roundedChange = Math.round(chart.changePercentage * 100) / 100
           result =
             range: range.key
