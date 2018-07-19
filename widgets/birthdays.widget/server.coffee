@@ -40,7 +40,8 @@ module.exports = (server) =>
     birthday = properties['BDAY']
     throw new Error("No full name found in #{vcard}") unless name?
     contact.name = name.value
-    contact.birthday = new Date(birthday.value) if birthday?
+    if birthday? and match = /(\d{4})\-(\d{2})\-(\d{2})/.exec(birthday.value)
+      contact.birthday = new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]))
     return contact
 
   loadContacts = (next) ->
@@ -61,12 +62,16 @@ module.exports = (server) =>
       for contact in contacts
         if contact.birthday?
           now = new Date()
+          now.setHours(0)
+          now.setMinutes(0)
+          now.setSeconds(0)
           date = new Date(contact.birthday)
           year = date.getFullYear()
           year = null if year < 1900
+          oneDay = (1000 * 60 * 60 * 24)
           date.setFullYear(now.getFullYear())
-          date.setFullYear(now.getFullYear() + 1) if date - now < 0
-          days = Math.ceil((date - now) / (1000 * 60 * 60 * 24))
+          date.setFullYear(now.getFullYear() + 1) if date - now < (oneDay * -1)
+          days = Math.ceil((date - now) / oneDay)
           age = null
           if year?
             age = now.getFullYear() - year
