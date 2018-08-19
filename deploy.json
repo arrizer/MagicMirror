@@ -1,7 +1,7 @@
 {
   "name" : "magic-mirror",
   "script" : "app.coffee",
-  "instances" : 0,
+  "instances" : 1,
   "out_file": "/dev/null",
   "error_file": "/dev/null"
 }
