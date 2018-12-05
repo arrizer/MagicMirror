@@ -5,7 +5,9 @@ module.exports = (server) =>
   areaID = null
             
   resolveCoordinateToArea = (latitude, longitude, next) ->
+    log.debug "Resolving coordinate #{latitude} / #{longitude} to area"
     url = 'http://feed.alertspro.meteogroup.com/AlertsPro/AlertsProPollService.php?method=lookupCoord&lat=' + latitude + '&lon=' + longitude
+    log.debug url
     Request (url: url, json: yes), (error, response, result) ->
       return next error if error?
       if result.push? and result.length >= 0
@@ -17,6 +19,7 @@ module.exports = (server) =>
   requestRainPrediction = (next) ->
     return next new Error("Area not supported") unless areaID?
     url = 'http://weatherpro.consumer.meteogroup.com/weatherpro/RainService.php?method=getRainChart&areaID=' + areaID
+    log.debug url
     Request (url: url, json: yes), (error, response, result) ->
       return next error if error?
       return next new Error("No rain forecast available for the region") if !result?
@@ -44,10 +47,17 @@ module.exports = (server) =>
       next null, rain
         
   server.init = (next) ->
-    resolveCoordinateToArea server.config.latitude, server.config.longitude, (error, result) ->
-      log.error "Failed to resolve coordinate. Rain prediction not supported!" if error?
-      areaID = result unless error?
+    if server.config.areaID?
+      areaID = server.config.areaID
       next()
+    else
+      resolveCoordinateToArea server.config.latitude, server.config.longitude, (error, result) ->
+        if error? 
+          log.error "Failed to resolve coordinate: #{error}"
+        else
+          areaID = result
+          console.log "Resolved areaID: #{areaID}"
+        next()
     
   server.handle 'rainforecast', (query, respond, fail) ->
     requestRainPrediction (error, result) ->
