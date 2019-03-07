@@ -13,6 +13,7 @@ module.exports = (server) =>
       request =
         url: "http://www.mvg-live.de/serviceV1/departures/#{encodeURIComponent(station.station)}/json?apiKey=#{config.mvglive_api_key}&maxEntries=50"
         json: yes
+      log.info "Loading #{request.url}"
       Request request, (error, response, body) ->
         return done(error) if error?
         result =

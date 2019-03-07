@@ -53,9 +53,9 @@
     {
       "widget": "weather",
       "config": {
-        "wunderground_api_key": "xxxxxxxxx",
-        "country": "Germany",
-        "city": "Munich",
+        "darksky_api_key": "xxxxxxxxxx",
+        "latitude": 48.1351,
+        "longitude": 11.582,
         "units": "celsius"
       }
     },

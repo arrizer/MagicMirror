@@ -25,3 +25,14 @@
   font-size: 20px;
   color: #888;
 }
+
+.weather .container .day .precipitationProbability {
+  font-size: 15px;
+  opacity: 0.25;
+  background-image: url('/weather/resources/percipitation.png');
+  background-size: 15px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: 18px;
+  display: inline;
+}

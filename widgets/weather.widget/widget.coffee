@@ -2,29 +2,7 @@
   widget.init = (next) ->
     container = widget.div.find('.container')
     window.moment.locale(widget.globalConfig.language)
-    
-    icons =
-      'chanceflurries': 'snow'
-      'chancerain': 'rain'
-      'chancesleet': 'sleet'
-      'chancesnow': 'snow'
-      'chancetstorms': 'thunderstorm'
-      'clear': 'sunny'
-      'cloudy': 'cloudy'
-      'flurries': 'snow'
-      'fog': 'fog'
-      'hazy': 'fog'
-      'mostlycloudy': 'cloudy'
-      'mostlysunny': 'sunny'
-      'partlycloudy': 'partly-cloudy'
-      'partlysunny': 'partly-cloudy'
-      'rain': 'rain'
-      'sleet': 'sleet'
-      'snow': 'snow'
-      'sunny': 'sunny'
-      'tstorms': 'rain'
-      'unknown': 'sunny'
-    
+        
     refresh = ->
       widget.load 'forecast', (error, response) ->
         container.empty()
@@ -41,10 +19,11 @@
           dayName = widget.string('today') if dayIndex is 0
           dayName = widget.string('tomorrow') if dayIndex is 1
           append 'name', dayName
-          icon = $('<img></img>').addClass('icon').attr('src', "/weather/resources/#{icons[day.conditions]}.png")
+          icon = $('<img></img>').addClass('icon').attr('src', "/weather/resources/#{day.icon}.png")
           div.append icon
           append 'temperatureMax', Math.round(day.temperatureHigh) + ' ' + widget.string('unit.temperature.' + response.units)
           append 'temperatureMin', Math.round(day.temperatureLow) + ' ' + widget.string('unit.temperature.' + response.units)
+          append 'precipitationProbability', Math.round(day.precipitationProbability) + ' %'
           container.append(div)
           dayIndex++
     
