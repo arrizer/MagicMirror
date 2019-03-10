@@ -10,7 +10,11 @@
       '3': 'intensity-heavy'
       
     setState = (icon, text) ->
-      iconImage.attr('src', '/rain/resources/' + icon + '.png')
+      if icon?
+        iconImage.attr('src', '/rain/resources/' + icon + '.png')
+        iconImage.show()
+      else
+        iconImage.hide()
       status.text(text)
 
     refresh = ->  
@@ -18,9 +22,11 @@
         container.css(opacity: '1')
         immediate = if response.minutes? and response.minutes <= 1 then '-immediate' else ''
         if error?
-          status.text(error)
-          setTimeout (-> refresh()), 1000
+          setState(null, error)
+          setTimeout (-> refresh()), 1000 
           return
+        else
+          setTimeout (-> refresh()), 1000 * 60
 
         if response.state is 'clear'
           widget.div.hide()
@@ -38,7 +44,6 @@
         else if response.state is 'raining'
           key = INTENSITY_KEYS[response.intensity]
           setState(key, widget.string('raining', widget.string(key)))
-        setTimeout (-> refresh()), 1000 * 60
   
-    status.text widget.string('loading')    
+    setState(null, widget.string('loading'))
     refresh()
