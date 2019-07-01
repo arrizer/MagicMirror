@@ -44,6 +44,20 @@
       }
     },
     {
+      "widget": "micromobility",
+      "config": {
+        "location": {
+          "latitude": 48.1351,
+          "longitude": 11.582
+        },
+        "providers": {
+          "tier": {
+            "zoneID": "MUNICH"
+          }
+        }
+      }
+    },
+    {
       "widget": "rain",
       "config": {
         "latitude": 48.1234,
