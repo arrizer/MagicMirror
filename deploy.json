@@ -1,5 +1,5 @@
 {
   "name" : "magic-mirror",
   "script" : "app.coffee",
-  "instances" : 1
+  "exec_interpreter": "coffee"
 }
