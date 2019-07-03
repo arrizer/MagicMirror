@@ -15,7 +15,7 @@
           #$('<div></div>').addClass('count').text(vehicles.length).appendTo(group)
           for vehicle in vehicles
             distance = vehicle.distance
-            distance = if distance < 1000 then "#{distance} m" else "#{Math.round(distance / 100) / 10} km"
+            distance = if distance < 1000 then "#{Math.round(distance)} m" else "#{Math.round(distance / 100) / 10} km"
             $('<div></div>').addClass('vehicle').text(distance).appendTo(group)
 
     container.text widget.string("loading")
