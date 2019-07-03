@@ -24,3 +24,7 @@
   position: relative;
   vertical-align: middle;
 }
+
+.micromobility .group .vehicle.far-away {
+  opacity: 0.35;
+}
