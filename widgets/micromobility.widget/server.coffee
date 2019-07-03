@@ -32,6 +32,18 @@ module.exports = (server) =>
           longitude: vehicle.lng
           id: vehicle.code
         return result
+    mvgbike: (config) ->
+      request =
+        url: "https://multimobil-core.mvg.de/v12/service/v12/networkState/networkState?MVG_RAD=0"
+        json: yes
+      response = await Request(request)
+      return response.addedBikes.map (vehicle) ->
+        result =
+          kind: 'bicycle'
+          latitude: vehicle.latitude
+          longitude: vehicle.longitude
+          id: vehicle.id
+        return result
 
   loadAllVehicles = ->
     providerNames = Object.keys(config.providers)
