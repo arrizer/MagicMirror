@@ -1,0 +1,46 @@
+.coronavirus .container {
+  text-align: center;
+}
+
+.coronavirus .item {
+  display: inline-block;
+  text-align: left;
+  margin-right: 40px;
+}
+
+.coronavirus .item .label {
+  font-size: 20px;
+  color: #AAA;
+}
+
+.coronavirus .item .metric {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.coronavirus .item .metric .value {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.coronavirus .item .metric .value.infected {
+  color: white;
+}
+
+.coronavirus .item .metric .value.sick {
+  color: orange;
+}
+
+.coronavirus .item .metric .value.dead {
+  color: red;
+}
+
+.coronavirus .item .metric .value.recovered {
+  color: green;
+}
+
+.coronavirus .item .metric .label {
+  font-size: 15px;
+  margin-top: 0;
+  color: #AAA;
+}

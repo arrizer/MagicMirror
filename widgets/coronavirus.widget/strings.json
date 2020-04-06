@@ -1,0 +1,16 @@
+{
+  "en" : {
+    "loading": "Loading...",
+    "metric.infected": "infected",
+    "metric.sick": "sick",
+    "metric.dead": "dead",
+    "metric.recovered": "recovered"
+  },
+  "de" : {
+    "loading": "Wird geladen...",
+    "metric.infected": "infiziert",
+    "metric.sick": "krank",
+    "metric.dead": "tot",
+    "metric.recovered": "erholt"
+  }
+}
