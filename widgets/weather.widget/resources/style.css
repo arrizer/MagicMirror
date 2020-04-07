@@ -14,7 +14,7 @@
 }
 
 .weather .container .day .name {
-
+  color: #AAA;
 }
 
 .weather .container .day .temperatureMax {
@@ -28,7 +28,7 @@
 
 .weather .container .day .precipitationProbability {
   font-size: 15px;
-  opacity: 0.25;
+  opacity: 0.5;
   background-image: url('/weather/resources/percipitation.png');
   background-size: 15px;
   background-position: left center;

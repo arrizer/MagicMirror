@@ -43,13 +43,13 @@
 }
 
 .netatmo .station .metric .quality {
-  height: 16px;
-  width: 16px;
+  height: 12px;
+  width: 12px;
   display: inline-block;
   float: left;
-  margin-top: 3px;
-  border-radius: 8px;
-  filter: blur(5px);
+  margin-top: 6px;
+  border-radius: 6px;
+  filter: blur(2px);
 }
 
 .netatmo .metric .quality.good {
@@ -74,5 +74,5 @@
 }
 
 .netatmo .metric .unit {
-
+  
 }
