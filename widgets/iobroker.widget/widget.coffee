@@ -1,6 +1,7 @@
 (widget) ->
   widget.init = (next) ->
     container = widget.div.find('.container')
+    previousConfigs = null
 
     views =
       openWindows: (div, data) ->
@@ -22,6 +23,8 @@
 
     refresh = ->
       widget.load 'views', (error, configs) ->
+        return if previousConfigs? and JSON.stringify(previousConfigs) == JSON.stringify(configs)
+        previousConfigs = configs
         container.empty()
         if error?
           container.text(error)

@@ -11,6 +11,7 @@
 .coronavirus .item .label {
   font-size: 20px;
   color: #AAA;
+  margin-bottom: 5px;
 }
 
 .coronavirus .item .metric {
@@ -20,7 +21,7 @@
 
 .coronavirus .item .metric .value {
   display: inline-block;
-  font-weight: bold;
+  font-size: 25px;
 }
 
 .coronavirus .item .metric .value.infected {
@@ -32,11 +33,11 @@
 }
 
 .coronavirus .item .metric .value.dead {
-  color: red;
+  color: #ff6842;
 }
 
 .coronavirus .item .metric .value.recovered {
-  color: green;
+  color: #9ef442;
 }
 
 .coronavirus .item .metric .label {

@@ -36,11 +36,11 @@ module.exports = (server) =>
             dead: 0
             recovered: 0
           for place in places
-            if place.country is placeConfig.country
-              item.infected += place.infected
-              item.sick += place.sick
-              item.dead += place.dead
-              item.recovered += place.recovered
+            continue if placeConfig.country? and (place.country isnt placeConfig.country)
+            item.infected += place.infected
+            item.sick += place.sick
+            item.dead += place.dead
+            item.recovered += place.recovered
           items.push(item)
         next(null, items)
 

@@ -8,7 +8,8 @@
           container.text(error)
           setTimeout (-> refresh()), 1000
           return
-        for provider, vehicles of response
+        for provider in Object.keys(response)
+          vehicles = response[provider]
           continue unless vehicles.length > 0
           group = $('<div></div>').addClass('group').appendTo(container)
           $('<img/>').addClass('icon').attr('src', "/micromobility/resources/provider-#{provider}.png").appendTo(group)

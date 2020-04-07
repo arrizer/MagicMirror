@@ -11,11 +11,13 @@
 .stocks .item .title {
   font-size: 20px;
   margin-bottom: 5px;
+  color: #AAA;
 }
 
 .stocks .item .quote {
   display: inline-block;
   margin-right: 15px;
+  font-size: 25px;
 }
 
 .stocks .item .quote.trend_up {
@@ -37,6 +39,5 @@
 
 .stocks .item .quote .range {
   font-size: 15px;
-  margin-top: 5px;
   color: #AAA;
 }
