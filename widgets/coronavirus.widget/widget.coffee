@@ -2,8 +2,17 @@
   widget.init = (next) ->
     container = widget.div.find('.container')
 
-    formatNumber = (x) ->
-      x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    round = (value, digits = 0) ->
+      exp = Math.pow(10, digits)
+      Math.round(value * exp) / exp
+
+    formatNumber = (value) ->
+      if value > 1000000
+        return "#{round(value / 1000000, 3)} mio"
+      else if value > 1000
+        return "#{round(value / 1000, 1)} k"
+      else
+        return value.toString()
 
     refresh = ->
       widget.load 'stats', (error, items) ->
