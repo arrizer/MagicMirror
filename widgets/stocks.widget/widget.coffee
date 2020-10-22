@@ -7,7 +7,7 @@
         container.empty()
         if error?
           container.text(error)
-          setTimeout (-> refresh()), 1000
+          setTimeout (-> refresh()), 1000 * 10
           return
         for item in items
           itemEl = $('<div>').addClass('item').appendTo(container)

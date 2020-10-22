@@ -5,8 +5,10 @@ module.exports = (server) =>
   log = server.log
 
   loadChart = (symbol, range, interval, next) ->
+    url = "https://query1.finance.yahoo.com/v8/finance/chart/#{encodeURIComponent(symbol)}"
+    log.debug "Loading stock data from: #{url}"
     request =
-      url: "https://query1.finance.yahoo.com/v8/finance/chart/#{encodeURIComponent(symbol)}"
+      url: url
       qs:
         range: range
         interval: interval
@@ -14,21 +16,24 @@ module.exports = (server) =>
       json: yes
     Request request, (error, _, response) ->
       return next(error) if error?
-      response = response.chart
-      return next(new Error("Yahoo Finance API Error: #{response.error.code}: #{response.error.description}")) if response.error?
-      result = response.result[0]
-      previousClose = result.meta.previousClose
-      quote = result.indicators.quote[0]
-      openPrices = [if previousClose? then previousClose else 0]
-      closePrices = [if previousClose? then previousClose else 0]
-      if quote.open? and quote.close?
-        openPrices = quote.open.filter((v) -> v?)
-        closePrices = quote.close.filter((v) -> v?)
-      chart =
-        priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
-        priceClose: closePrices[closePrices.length - 1]
-      chart.changePercentage = ((chart.priceClose / chart.priceOpen) - 1) * 100
-      next(null, chart)
+      try
+        return next(new Error("Yahoo Finance API Error: #{response.error.code}: #{response.error.description}")) if response.error?
+        response = response.chart
+        result = response.result[0]
+        previousClose = result.meta.previousClose
+        quote = result.indicators.quote[0]
+        openPrices = [if previousClose? then previousClose else 0]
+        closePrices = [if previousClose? then previousClose else 0]
+        if quote.open? and quote.close?
+          openPrices = quote.open.filter((v) -> v?)
+          closePrices = quote.close.filter((v) -> v?)
+        chart =
+          priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
+          priceClose: closePrices[closePrices.length - 1]
+        chart.changePercentage = ((chart.priceClose / chart.priceOpen) - 1) * 100
+        next(null, chart)
+      catch error
+        next(new Error("Yahoo Finance API parsing error: #{error}"))
 
   server.handle 'quotes', (query, respond, fail) ->
     ranges = [

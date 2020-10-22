@@ -141,5 +141,5 @@ class WidgetInstance
           res.json (success: yes, response: result)
         onError = (error) -> 
           log.error 'Responding to %s with error:', path, error
-          res.json (success: no, error: error)
+          res.json (success: no, error: "#{error}")
         handler req.query, onResult, onError
