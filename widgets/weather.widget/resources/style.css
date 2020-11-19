@@ -28,11 +28,31 @@
 
 .weather .container .day .precipitationProbability {
   font-size: 15px;
-  opacity: 0.5;
-  background-image: url('/weather/resources/percipitation.png');
+  color: #00A2FF;
+  background-image: url('/weather/resources/precipitation_0.png');
   background-size: 15px;
   background-position: left center;
   background-repeat: no-repeat;
   padding-left: 18px;
   display: inline;
+}
+
+.weather .container .day .precipitationProbability.level0 {
+  background-image: url('/weather/resources/precipitation_0.png');
+}
+
+.weather .container .day .precipitationProbability.level1 {
+  background-image: url('/weather/resources/precipitation_1.png');
+}
+
+.weather .container .day .precipitationProbability.level2 {
+  background-image: url('/weather/resources/precipitation_2.png');
+}
+
+.weather .container .day .precipitationProbability.level3 {
+  background-image: url('/weather/resources/precipitation_3.png');
+}
+
+.weather .container .day .precipitationProbability.level4 {
+  background-image: url('/weather/resources/precipitation_5.png');
 }
