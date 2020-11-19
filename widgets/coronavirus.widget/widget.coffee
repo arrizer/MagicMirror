@@ -8,7 +8,7 @@
 
     formatNumber = (value) ->
       if value > 1000000
-        return "#{round(value / 1000000, 3)} mio"
+        return "#{round(value / 1000000, 2)} mio"
       else if value > 1000
         return "#{round(value / 1000, 1)} k"
       else
