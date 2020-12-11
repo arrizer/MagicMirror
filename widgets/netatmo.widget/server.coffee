@@ -12,6 +12,7 @@ module.exports = (server) =>
     'Pressure': 'mBar'
 
   metricsFromDashboardData = (data) ->
+    return [] unless data?
     keys = ['Temperature', 'CO2', 'Humidity']
     metrics = []
     for key in keys when data[key]?
