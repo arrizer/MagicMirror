@@ -17,6 +17,7 @@ module.exports = class Server
 
   constructor: (@config) ->
     log.debug 'Setting up server...'
+    @parseArguments()
     app = Express()
     app.enable 'trust proxy'
     app.disable 'x-powered-by'
@@ -30,12 +31,25 @@ module.exports = class Server
     app.use BodyParser.json()
     app.use Static(Path.join(@config.path, 'server', 'static'))
     @app = app
+
+  parseArguments: ->
+    @args = {}
+    for arg in process.argv
+      if arg.startsWith('--')
+        components = arg.split('=')
+        key = components[0].substring(2)
+        value = if components.length == 2 then components[1] else true
+        @args[key] = value
+        log.debug "Launch argument: #{key}=#{value}"      
   
   start: (next) ->
     @displayController = new DisplayController()
     @runtime = new WidgetRuntime(Path.join(@config.path, 'widgets'), Path.join(@config.path, 'server', 'client', 'client.coffee'), @config)
     @runtime.load =>
-      @runtime.startWidgets @config.widgets, (error) =>
+      widgets = @config.widgets
+      if @args['only-widget']?
+        widgets = widgets.filter((item) => item.widget == @args['only-widget'])
+      @runtime.startWidgets widgets, (error) =>
         if error?
           log.error "Failed to start widgets: %s", error
           next error if next?
