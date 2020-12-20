@@ -15,20 +15,34 @@
         return value.toString()
 
     refresh = ->
-      widget.load 'stats', (error, items) ->
+      widget.load 'stats', (error, result) ->
         container.empty()
         if error?
           container.text(error)
           setTimeout (-> refresh()), 1000
           return
-        for item in items
-          itemEl = $('<div>').addClass('item').appendTo(container)
-          $('<div>').addClass('label').text(item.label).appendTo(itemEl)
-          metricsEl = $('<div>').addClass('metrics').appendTo(itemEl)
+        
+        addItem = (label) ->
+          el = $('<div>').addClass('item').appendTo(container)
+          $('<div>').addClass('label').text(label).appendTo(el)
+          metricsEl = $('<div>').addClass('metrics').appendTo(el)
+          return metricsEl
+        
+        addMetric = (metricsEl, metric, value) ->
+          metricEl = $('<div>').addClass('metric').appendTo(metricsEl)
+          $('<div>').addClass('value').addClass(metric).text(formatNumber(value)).appendTo(metricEl)
+          $('<div>').addClass('label').text(widget.string("metric.#{metric}")).appendTo(metricEl)
+        
+        for place in result.places
+          el = addItem(place.label)
           for metric in ['infected', 'sick', 'recovered', 'dead']
-            metricEl = $('<div>').addClass('metric').appendTo(metricsEl)
-            $('<div>').addClass('value').addClass(metric).text(formatNumber(item[metric])).appendTo(metricEl)
-            $('<div>').addClass('label').text(widget.string("metric.#{metric}")).appendTo(metricEl)
+            addMetric(el, metric, place[metric])
+        
+        for county in result.counties
+          el = addItem(county.label)
+          for metric in ['incidence']
+            addMetric(el, metric, county[metric])
+
         setTimeout (-> refresh()), (1000 * 60 * 15)
 
     container.text widget.string("loading")

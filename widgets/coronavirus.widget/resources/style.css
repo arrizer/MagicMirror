@@ -40,6 +40,10 @@
   color: #9ef442;
 }
 
+.coronavirus .item .metric .value.incidence {
+  color: white;
+}
+
 .coronavirus .item .metric .label {
   font-size: 15px;
   margin-top: 0;

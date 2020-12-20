@@ -4,13 +4,15 @@
     "metric.infected": "infected",
     "metric.sick": "sick",
     "metric.dead": "casualties",
-    "metric.recovered": "recovered"
+    "metric.recovered": "recovered",
+    "metric.incidence": "7 day incidence"
   },
   "de" : {
     "loading": "Wird geladen...",
     "metric.infected": "infiziert",
     "metric.sick": "aktive Fälle",
     "metric.dead": "verstorben",
-    "metric.recovered": "erholt"
+    "metric.recovered": "erholt",
+    "metric.incidence": "7-Tage Inzidenz"
   }
 }

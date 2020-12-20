@@ -14,7 +14,8 @@ module.exports = (server) =>
         date: /data-c="(.*?)"/.exec(body)[1]
       next(null, auth)
 
-  loadStats = (next) ->
+  getPlaces = (next) ->
+    return next(null, []) unless config.places?
     getToken (error, auth) ->
       return next(error) if error?
       headers = {}
@@ -43,6 +44,42 @@ module.exports = (server) =>
             item.recovered += place.recovered
           items.push(item)
         next(null, items)
+
+  getCounty = (county, next) ->
+    # Find RKI county IDs here: 
+    # https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0/data?geometry=-10.085%2C46.211%2C32.103%2C55.839&orderBy=OBJECTID&selectedAttribute=BL
+    request = 
+      url: "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query"
+      qs:
+        objectIds: county.id
+        outFields: '*'
+        returnGeometry: false
+        returnCentroid: false
+        f: 'pjson'
+      json: yes
+    Request request, (error, _, body) ->
+      return next(error) if error?
+      attributes = body.features[0].attributes
+      result =
+        label: county.label
+        incidence: Math.round(attributes.cases7_per_100k)
+      next(null, result)
+
+  getCounties = (next) ->
+    return next(null, []) unless config.rki_counties?
+    Async.map config.rki_counties, (county, next) ->
+      getCounty(county, next)
+    , next
+
+  loadStats = (next) ->
+    getPlaces (placesError, places) ->
+      getCounties (countiesError, counties) ->
+        error = placesError or countiesError
+        next(error) if error?
+        result =
+          places: places
+          counties: counties
+        next(null, result)
 
   server.handle 'stats', (query, respond, fail) ->
     loadStats (error, items) ->

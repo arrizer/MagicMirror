@@ -94,6 +94,17 @@
       }
     },
     {
+      "widget": "coronavirus",
+      "config": {
+        "places": [
+          {"country": "XX", "label": "Country Name"}
+        ],
+        "rki_counties": [
+          {"id": 123, "label": "My City"}
+        ]
+      }
+    },
+    {
       "widget": "iobroker",
       "config": {
         "baseURL": "http://myserver.local:8888",
