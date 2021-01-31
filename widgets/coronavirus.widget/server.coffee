@@ -71,15 +71,32 @@ module.exports = (server) =>
       getCounty(county, next)
     , next
 
+  getVaccinationProgress = (next) ->
+    request =
+      url: "https://impfdashboard.de/static/data/germany_vaccinations_timeseries_v2.tsv"
+    Request request, (error, _, body) ->
+      return next(error) if error?
+      rows = body.split("\n")
+      latestRow = []
+      while latestRow.length <= 1
+        latestRow = rows.pop().split("\t")
+      console.log latestRow
+      result =
+        progressFirstShot: parseFloat(latestRow[9])
+        progressSecondShot: parseFloat(latestRow[10])
+      next(null, result)
+
   loadStats = (next) ->
     getPlaces (placesError, places) ->
       getCounties (countiesError, counties) ->
-        error = placesError or countiesError
-        next(error) if error?
-        result =
-          places: places
-          counties: counties
-        next(null, result)
+        getVaccinationProgress (vaccinationError, vaccinationProgress) ->
+          error = placesError or countiesError or vaccinationError
+          next(error) if error?
+          result =
+            places: places
+            counties: counties
+            vaccinationProgress: vaccinationProgress
+          next(null, result)
 
   server.handle 'stats', (query, respond, fail) ->
     loadStats (error, items) ->

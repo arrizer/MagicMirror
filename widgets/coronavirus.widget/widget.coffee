@@ -14,6 +14,9 @@
       else
         return value.toString()
 
+    formatPercentage = (value) ->
+      return (Math.round(value * 10000) / 100) + " %"
+
     refresh = ->
       widget.load 'stats', (error, result) ->
         container.empty()
@@ -28,20 +31,24 @@
           metricsEl = $('<div>').addClass('metrics').appendTo(el)
           return metricsEl
         
-        addMetric = (metricsEl, metric, value) ->
+        addMetric = (metricsEl, metric, text) ->
           metricEl = $('<div>').addClass('metric').appendTo(metricsEl)
-          $('<div>').addClass('value').addClass(metric).text(formatNumber(value)).appendTo(metricEl)
+          $('<div>').addClass('value').addClass(metric).text(text).appendTo(metricEl)
           $('<div>').addClass('label').text(widget.string("metric.#{metric}")).appendTo(metricEl)
         
         for place in result.places
           el = addItem(place.label)
           for metric in ['infected', 'sick', 'recovered', 'dead']
-            addMetric(el, metric, place[metric])
+            addMetric(el, metric, formatNumber(place[metric]))
         
         for county in result.counties
           el = addItem(county.label)
           for metric in ['incidence']
-            addMetric(el, metric, county[metric])
+            addMetric(el, metric, formatNumber(county[metric]))
+
+        el = addItem(widget.string("vaccinations.title"))
+        for metric, value of result.vaccinationProgress
+          addMetric(el, "vaccinations.#{metric}", formatPercentage(value))
 
         setTimeout (-> refresh()), (1000 * 60 * 15)
 

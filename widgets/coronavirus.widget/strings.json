@@ -5,7 +5,10 @@
     "metric.sick": "sick",
     "metric.dead": "casualties",
     "metric.recovered": "recovered",
-    "metric.incidence": "7 day incidence"
+    "metric.incidence": "7 day incidence",
+    "vaccinations.title": "Vaccinations",
+    "metric.vaccinations.progressFirstShot": "first shot",
+    "metric.vaccinations.progressSecondShot": "second shot"
   },
   "de" : {
     "loading": "Wird geladen...",
@@ -13,6 +16,9 @@
     "metric.sick": "aktive Fälle",
     "metric.dead": "verstorben",
     "metric.recovered": "erholt",
-    "metric.incidence": "7-Tage Inzidenz"
+    "metric.incidence": "7-Tage Inzidenz",
+    "vaccinations.title": "Impf-Fortschritt",
+    "metric.vaccinations.progressFirstShot": "Erstimpfung",
+    "metric.vaccinations.progressSecondShot": "Zweitimpfung"
   }
 }
