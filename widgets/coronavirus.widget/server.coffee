@@ -76,14 +76,21 @@ module.exports = (server) =>
       url: "https://impfdashboard.de/static/data/germany_vaccinations_timeseries_v2.tsv"
     Request request, (error, _, body) ->
       return next(error) if error?
-      rows = body.split("\n")
-      latestRow = []
-      while latestRow.length <= 1
-        latestRow = rows.pop().split("\t")
-      console.log latestRow
+      lines = body.split("\n")
+      keys = lines.shift().split("\t")
+      lines.pop()
+      rows = lines.map (line) ->
+        row = {}
+        index = 0
+        for value in line.split("\t")
+          row[keys[index]] = value
+          index++
+        return row
+      console.log rows
+      latestRow = rows.pop()
       result =
-        progressFirstShot: parseFloat(latestRow[9])
-        progressSecondShot: parseFloat(latestRow[10])
+        progressFirstShot: parseFloat(latestRow['impf_quote_erst'])
+        progressSecondShot: parseFloat(latestRow['impf_quote_voll'])
       next(null, result)
 
   loadStats = (next) ->
