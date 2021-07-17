@@ -22,33 +22,22 @@ $ ->
           return string
         config: instance.config
         globalConfig: JSON.parse(decode $('#config').text())
-        load: (endpoint, data, next) ->
-          unless next?
-            next = data
-            data = null
-          $.ajax
-            type: 'GET'
-            url: instance.instanceID + '/' + endpoint
-            success: (message, status) =>
-              if message.success
-                next null, message.response
-              else
-                next new Error(message.error) if next?
-            error: (xhr, status, error) =>
-              message = 'Unknown error'
-              if xhr.status is 0
-                message = 'Could not connect to the server'
-              else if xhr.status > 0
-                response = null
-                response = JSON.parse(xhr.responseText) if xhr.responseText?
-                message = (if response? then response.error else 'Server error')
-              else if error is 'parsererror'
-                message = 'Failed to parse server response'
-              else if error is 'timeout'
-                message = 'Request timed out'
-              next message if next?
-            dataType: 'json'
-            data: data
+        load: (endpoint, next) ->
+          next = (=>) unless next?
+          fetch instance.instanceID + '/' + endpoint, (method: 'GET')
+          .then (response) =>
+            if response.ok
+              response.json()
+              .then (json) => 
+                if json.success
+                  next null, json.response
+                else
+                  next new Error(json.error)
+              .catch (error) => next error
+            else
+              next new Error("HTTP Error: #{response.status} #{response.statusText}")
+          .catch (error) =>
+            next error
       widgetFactories[instance.widget](widget)
       widget.init()
       @widgets.push widget
