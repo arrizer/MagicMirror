@@ -56,7 +56,6 @@ module.exports = (server) =>
           log.error "Failed to resolve coordinate: #{error}"
         else
           areaID = result
-          console.log "Resolved areaID: #{areaID}"
         next()
     
   server.handle 'rainforecast', (query, respond, fail) ->

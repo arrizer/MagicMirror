@@ -8,7 +8,6 @@ module.exports = class DisplayController
     @isOn = true
     @router = Express.Router()
     @router.get '/display-power', (req, res) =>
-      console.log @isOn
       res.send(if @isOn then '1' else '0')
     @router.put '/display-power', (req, res) =>
       command = req.query.on

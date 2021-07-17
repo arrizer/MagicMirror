@@ -60,7 +60,6 @@ module.exports = (server) =>
           station = stationFromObject(module)
           stations.push(station) if station?
       orderedStations = []
-      console.log stations
       for moduleConfig in server.config.modules
         for station in stations
           if station.module is moduleConfig.module

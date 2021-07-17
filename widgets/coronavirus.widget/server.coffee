@@ -86,7 +86,6 @@ module.exports = (server) =>
           row[keys[index]] = value
           index++
         return row
-      console.log rows
       latestRow = rows.pop()
       result =
         progressFirstShot: parseFloat(latestRow['impf_quote_erst'])
