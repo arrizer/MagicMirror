@@ -1,6 +1,6 @@
 #!/bin/bash
 
-killall chromium-browser
+killall chromium-browse
 cd /home/pi/MagicMirror/
 pm2 kill
 pm2 start deploy.json
