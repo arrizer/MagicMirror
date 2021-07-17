@@ -1,22 +1,22 @@
 {
   "en" : {
     "loading": "Loading...",
-    "metric.infected": "infected",
-    "metric.sick": "sick",
+    "metric.cases": "cases",
     "metric.dead": "casualties",
     "metric.recovered": "recovered",
     "metric.incidence": "7 day incidence",
+    "metric.rvalue": "7 day R-value",
     "vaccinations.title": "Vaccinations",
     "metric.vaccinations.progressFirstShot": "first shot",
     "metric.vaccinations.progressSecondShot": "second shot"
   },
   "de" : {
     "loading": "Wird geladen...",
-    "metric.infected": "infiziert",
-    "metric.sick": "aktive Fälle",
+    "metric.cases": "Fälle",
     "metric.dead": "verstorben",
     "metric.recovered": "erholt",
     "metric.incidence": "7-Tage Inzidenz",
+    "metric.rvalue": "7-Tage R-Wert",
     "vaccinations.title": "Impf-Fortschritt",
     "metric.vaccinations.progressFirstShot": "Erstimpfung",
     "metric.vaccinations.progressSecondShot": "Zweitimpfung"

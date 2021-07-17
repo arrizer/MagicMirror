@@ -36,15 +36,14 @@
           $('<div>').addClass('value').addClass(metric).text(text).appendTo(metricEl)
           $('<div>').addClass('label').text(widget.string("metric.#{metric}")).appendTo(metricEl)
         
-        for place in result.places
-          el = addItem(place.label)
-          for metric in ['infected', 'sick', 'recovered', 'dead']
-            addMetric(el, metric, formatNumber(place[metric]))
+        el = addItem(result.stats.label)
+        for metric in ['cases', 'recovered', 'dead', 'rvalue', 'incidence']
+          addMetric(el, metric, formatNumber(result.stats[metric]))
         
-        for county in result.counties
-          el = addItem(county.label)
+        for district in result.districts
+          el = addItem(district.label)
           for metric in ['incidence']
-            addMetric(el, metric, formatNumber(county[metric]))
+            addMetric(el, metric, formatNumber(district[metric]))
 
         el = addItem(widget.string("vaccinations.title"))
         for metric, value of result.vaccinationProgress
