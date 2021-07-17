@@ -37,7 +37,8 @@
           div.append icon
           append 'temperatureMax', Math.round(day.temperatureHigh) + ' ' + widget.string('unit.temperature.' + response.units)
           append 'temperatureMin', Math.round(day.temperatureLow) + ' ' + widget.string('unit.temperature.' + response.units)
-          append('precipitationProbability', Math.round(day.precipitationProbability) + ' %').addClass("level#{precipitationLevel(day.precipitationProbability)}")
+          precipitationEl = append('precipitationProbability', Math.round(day.precipitationProbability) + ' %').addClass("level#{precipitationLevel(day.precipitationProbability)}")
+          precipitationEl.css('opacity', 0) if day.precipitationProbability < 1
           container.append(div)
           dayIndex++
     

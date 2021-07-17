@@ -1,5 +1,5 @@
 (widget) ->
-  widget.init = (next) ->
+  widget.init = ->
     container = widget.div.find('.container')
 
     refresh = ->
@@ -17,7 +17,7 @@
             quoteEl = $('<div>').addClass('quote').appendTo(quotesEl)
             quoteEl.addClass("trend_#{quote.trend}")
             $('<div>').addClass('trend').text(if quote.trend is 'up' then '▲' else '▼').appendTo(quoteEl)
-            $('<div>').addClass('change').text(quote.change).appendTo(quoteEl)
+            $('<div>').addClass('change').text("#{widget.util.formatNumber(quote.change, (maximumFractionDigits: 2, minimumFractionDigits: 2))} %").appendTo(quoteEl)
             $('<div>').addClass('range').text(widget.string("quote.#{quote.range}")).appendTo(quoteEl)
 
     container.text widget.string("loading")

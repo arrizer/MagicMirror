@@ -44,6 +44,14 @@
   color: white;
 }
 
+.coronavirus .item .metric .value.range_bad {
+  color: #ff6842;
+}
+
+.coronavirus .item .metric .value.range_good {
+  color: #9ef442;
+}
+
 .coronavirus .item .metric .label {
   font-size: 15px;
   margin-top: 0;

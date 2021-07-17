@@ -46,10 +46,9 @@ module.exports = (server) =>
       Async.map ranges, (range, done) ->
         loadChart quote.symbol, range.range, range.interval, (error, chart) ->
           return done(error) if error?
-          roundedChange = Math.round(chart.changePercentage * 100) / 100
           result =
             range: range.key
-            change: parseFloat(Math.round(roundedChange * 100) / 100).toFixed(2) + ' %'
+            change: chart.changePercentage
             open: chart.priceOpen
             close: chart.priceClose
             trend: if chart.changePercentage >= 0 then 'up' else 'down'

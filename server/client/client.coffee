@@ -12,6 +12,7 @@ $ ->
       template.addClass instance.widget
       template.appendTo(@dashboard)
       strings = JSON.parse(decode $('#widget_' + instance.widget + '_strings').text())
+      config = JSON.parse(decode $('#config').text())
       widget =
         div: template
         update: (next) -> next()
@@ -21,7 +22,11 @@ $ ->
           string = string.replace '%' + index++, placeholder for placeholder in placeholders
           return string
         config: instance.config
-        globalConfig: JSON.parse(decode $('#config').text())
+        util:
+          formatNumber: (value, options) ->
+            options = {} unless options?
+            return Intl.NumberFormat(config.language, options).format(value)
+        globalConfig: config
         load: (endpoint, next) ->
           next = (=>) unless next?
           fetch instance.instanceID + '/' + endpoint, (method: 'GET')

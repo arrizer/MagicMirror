@@ -1,21 +1,21 @@
 (widget) ->
-  widget.init = (next) ->
+  widget.init = ->
     container = widget.div.find('.container')
 
     round = (value, digits = 0) ->
       exp = Math.pow(10, digits)
-      Math.round(value * exp) / exp
+      return Math.round(value * exp) / exp
 
     formatNumber = (value) ->
       if value > 1000000
-        return "#{round(value / 1000000, 2)} mio"
+        return "#{widget.util.formatNumber(round(value / 1000000, 2))} mio"
       else if value > 1000
-        return "#{round(value / 1000, 1)} k"
+        return "#{widget.util.formatNumber(round(value / 1000, 1))} k"
       else
-        return value.toString()
+        return widget.util.formatNumber(value)
 
     formatPercentage = (value) ->
-      return (Math.round(value * 10000) / 100) + " %"
+      widget.util.formatNumber(Math.round(value * 10000) / 100) + " %"
 
     refresh = ->
       widget.load 'stats', (error, result) ->
@@ -31,14 +31,16 @@
           metricsEl = $('<div>').addClass('metrics').appendTo(el)
           return metricsEl
         
-        addMetric = (metricsEl, metric, text) ->
+        addMetric = (metricsEl, metric, text, cssClass) ->
           metricEl = $('<div>').addClass('metric').appendTo(metricsEl)
-          $('<div>').addClass('value').addClass(metric).text(text).appendTo(metricEl)
+          valueEl = $('<div>').addClass('value').addClass(metric).text(text).appendTo(metricEl)
+          valueEl.addClass(cssClass) if cssClass?
           $('<div>').addClass('label').text(widget.string("metric.#{metric}")).appendTo(metricEl)
         
         el = addItem(result.stats.label)
-        for metric in ['cases', 'recovered', 'dead', 'rvalue', 'incidence']
+        for metric in ['cases', 'recovered', 'dead', 'incidence']
           addMetric(el, metric, formatNumber(result.stats[metric]))
+        addMetric(el, 'rvalue', formatNumber(result.stats.rvalue), if result.stats.rvalue > 1 then 'range_bad' else 'range_good')
         
         for district in result.districts
           el = addItem(district.label)
