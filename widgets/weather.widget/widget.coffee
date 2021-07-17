@@ -21,6 +21,7 @@
         container.empty()
         if error?
           container.text(error.toString())
+          setTimeout (-> refresh()), 1000
           return
         dayIndex = 0
         for day in response.days
@@ -40,8 +41,6 @@
           container.append(div)
           dayIndex++
     
-    container.text widget.string('loading')    
+    container.text widget.string('loading')
+    setInterval (->refresh()), (1000 * 60 * 10)
     refresh()
-    setInterval ->
-      refresh()
-    , (1000 * 60 * 10)

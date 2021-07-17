@@ -31,7 +31,7 @@
           widget.div.show()
         else
           widget.div.hide()
-        setTimeout (-> refresh()), (1000 * 60)
 
     widget.div.hide()
+    setInterval (-> refresh()), (1000 * 60 * 10)
     refresh()

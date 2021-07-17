@@ -37,7 +37,7 @@
               $('<span/>').addClass('value').text(metric.value).appendTo(metricDiv)
               $('<span/>').addClass('unit').text(metric.unit).appendTo(metricDiv)
           metricsDiv.appendTo(stationDiv)
-         setTimeout (-> refresh()), 1000 * 60
 
     container.text widget.string("loading")
+    setInterval (-> refresh()), (1000 * 60)
     refresh()

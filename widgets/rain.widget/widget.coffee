@@ -25,8 +25,6 @@
           setState(null, error)
           setTimeout (-> refresh()), 1000 
           return
-        else
-          setTimeout (-> refresh()), 1000 * 60
 
         if response.state is 'clear'
           widget.div.hide()
@@ -46,4 +44,5 @@
           setState(key, widget.string('raining', widget.string(key)))
   
     setState(null, widget.string('loading'))
+    setInterval (-> refresh()), 1000 * 60
     refresh()

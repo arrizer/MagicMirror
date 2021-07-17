@@ -50,7 +50,6 @@
         for metric, value of result.vaccinationProgress
           addMetric(el, "vaccinations.#{metric}", formatPercentage(value))
 
-        setTimeout (-> refresh()), (1000 * 60 * 15)
-
     container.text widget.string("loading")
+    setInterval (-> refresh()), (1000 * 60 * 15)
     refresh()

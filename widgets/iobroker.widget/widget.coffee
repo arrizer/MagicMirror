@@ -34,7 +34,5 @@
           views[config.view](div, config.data)
 
     container.text widget.string("loading")
-    setInterval ->
-      refresh()
-    , 1000
+    setInterval (-> refresh()), 1000
     refresh()
