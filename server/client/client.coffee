@@ -13,6 +13,7 @@ $ ->
       template.appendTo(@dashboard)
       strings = JSON.parse(decode $('#widget_' + instance.widget + '_strings').text())
       config = JSON.parse(decode $('#config').text())
+      scheduledPeriodicLoad = null
       widget =
         div: template
         update: (next) -> next()
@@ -27,6 +28,21 @@ $ ->
             options = {} unless options?
             return Intl.NumberFormat(config.language, options).format(value)
         globalConfig: config
+        loadPeriodic: (endpoint, seconds, next) ->
+          schedule = (s) ->
+            clearTimeout(scheduledPeriodicLoad) if scheduledPeriodicLoad?
+            scheduledPeriodicLoad = setTimeout (-> widget.loadPeriodic(endpoint, seconds, next)), 1000 * s
+          widget.load endpoint, (error, response) ->
+            if error?
+              schedule(1)
+              next(error)
+            else
+              try
+                next(null, response)
+                schedule(seconds)
+              catch error
+                schedule(1)
+                next(error)
         load: (endpoint, next) ->
           next = (=>) unless next?
           fetch instance.instanceID + '/' + endpoint, (method: 'GET')
@@ -44,7 +60,6 @@ $ ->
           .catch (error) =>
             next error
       widgetFactories[instance.widget](widget)
-      widget.init()
       @widgets.push widget
   
   instances = JSON.parse(decode $('#widget_instances').text())

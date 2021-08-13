@@ -2,14 +2,11 @@
   headline = widget.div.find('.headline')
   articles = []
   nextArticle = 0
-
-  widget.init = ->
-    headline.css 
-      'font-size': '30px'
-      'text-align': 'center'
-      'text-color': '#888'
-    headline.text widget.string('news.loading')
-    proceed()
+  headline.css 
+    'font-size': '30px'
+    'text-align': 'center'
+    'text-color': '#888'
+  headline.text widget.string('news.loading')
     
   proceed = -> 
     if nextArticle >= articles.length
@@ -39,3 +36,5 @@
       else
         articles = response
       next()
+
+  proceed()

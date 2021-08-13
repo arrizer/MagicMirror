@@ -1,6 +1,7 @@
 (widget) ->
   container = widget.div.find('.container')
   previousConfigs = null
+  container.text widget.string("loading")
 
   views =
     openWindows: (div, data) ->
@@ -20,19 +21,13 @@
       else
         div.hide()
 
-  widget.init = (next) ->
-    container.text widget.string("loading")
-    refresh()
-    setInterval refresh, 1000
-
-  refresh = ->
-    widget.load 'views', (error, configs) ->
-      return if previousConfigs? and JSON.stringify(previousConfigs) == JSON.stringify(configs)
-      previousConfigs = configs
-      container.empty()
-      if error?
-        container.text(error)
-        return
-      for config in configs
-        div = $('<div/>').addClass('view').addClass(config.view).appendTo(container)
-        views[config.view](div, config.data)
+  widget.loadPeriodic 'views', 1, (error, configs) ->
+    return if previousConfigs? and JSON.stringify(previousConfigs) == JSON.stringify(configs)
+    previousConfigs = configs
+    container.empty()
+    if error?
+      container.text(error)
+      return
+    for config in configs
+      div = $('<div/>').addClass('view').addClass(config.view).appendTo(container)
+      views[config.view](div, config.data)
