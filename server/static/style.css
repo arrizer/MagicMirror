@@ -21,10 +21,26 @@ html {
   font-size: 20px;
 }
 
-.widget {
+.widget_container {
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 10px;  
   box-sizing: border-box;
+  position: relative;
+}
+
+.widget {
+
+}
+
+.widget_container .error_overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width:  100%;
+  text-align: center;
+  z-index: 100;
+  color: red;
+  font-size: 10px;
 }
 
 .widget:last-child {

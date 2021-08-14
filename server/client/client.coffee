@@ -6,11 +6,14 @@ $ ->
       @widgets = []
    
     createWidget: (instance) ->
+      container = $('<div></div>').addClass('widget_container').appendTo(@dashboard)
       template = $(decode $('#widget_' + instance.widget + '_template').text())
+      template.appendTo(container)
       template.attr 'id', 'widget_instance_' + instance.instanceID
       template.addClass 'widget'
       template.addClass instance.widget
-      template.appendTo(@dashboard)
+      errorOverlay = $('<div></div>').addClass('error_overlay').appendTo(container)
+      errorOverlay.hide()
       strings = JSON.parse(decode $('#widget_' + instance.widget + '_strings').text())
       config = JSON.parse(decode $('#config').text())
       scheduledPeriodicLoad = null
@@ -29,20 +32,21 @@ $ ->
             return Intl.NumberFormat(config.language, options).format(value)
         globalConfig: config
         loadPeriodic: (endpoint, seconds, next) ->
-          schedule = (s) ->
+          done = (error) ->
+            template.css('opacity', if !error? then '1' else '0.3')
+            timeout = if !error? then seconds else 1
+            errorOverlay.text(if error? then error.message else '')
             clearTimeout(scheduledPeriodicLoad) if scheduledPeriodicLoad?
-            scheduledPeriodicLoad = setTimeout (-> widget.loadPeriodic(endpoint, seconds, next)), 1000 * s
+            scheduledPeriodicLoad = setTimeout (-> widget.loadPeriodic(endpoint, seconds, next)), 1000 * timeout
           widget.load endpoint, (error, response) ->
             if error?
-              schedule(1)
-              next(error)
+              done(new Error("Load failed: #{error.message}"))
             else
               try
                 next(null, response)
-                schedule(seconds)
+                done(null)
               catch error
-                schedule(1)
-                next(error)
+                done(new Error("Client Error: #{error.message}"))
         load: (endpoint, next) ->
           next = (=>) unless next?
           fetch instance.instanceID + '/' + endpoint, (method: 'GET')
@@ -53,12 +57,13 @@ $ ->
                 if json.success
                   next null, json.response
                 else
-                  next new Error(json.error)
-              .catch (error) => next error
+                  next new Error("Server Error: #{json.error}")
+              .catch (error) => 
+                next new Error("JSON parser error: #{error.message}")
             else
               next new Error("HTTP Error: #{response.status} #{response.statusText}")
           .catch (error) =>
-            next error
+            next new Error("Network Error: #{error.message}")
       widgetFactories[instance.widget](widget)
       @widgets.push widget
   
