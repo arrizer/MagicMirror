@@ -10,13 +10,14 @@ Hogan        = require 'hogan-express'
 WidgetRuntime = require './WidgetRuntime'
 DisplayController = require './DisplayController'
 
-log = require './Log'
+Log = require './Log'
 
 module.exports = class Server
   DEFAULT_PORT = 8080
 
   constructor: (@config) ->
-    log.debug 'Setting up server...'
+    @log = new Log("Server")
+    @log.debug 'Setting up server...'
     @parseArguments()
     app = Express()
     app.enable 'trust proxy'
@@ -40,7 +41,7 @@ module.exports = class Server
         key = components[0].substring(2)
         value = if components.length == 2 then components[1] else true
         @args[key] = value
-        log.debug "Launch argument: #{key}=#{value}"      
+        @log.debug "Launch argument: #{key}=#{value}"      
   
   start: (next) ->
     @displayController = new DisplayController()
@@ -51,7 +52,7 @@ module.exports = class Server
         widgets = widgets.filter((item) => item.widget == @args['only-widget'])
       @runtime.startWidgets widgets, (error) =>
         if error?
-          log.error "Failed to start widgets: %s", error
+          @log.error "Failed to start widgets: #{error}"
           next error if next?
         else
           @app.use @runtime.router
@@ -61,7 +62,7 @@ module.exports = class Server
   startServer: (next) ->
     HTTP.createServer(@app).listen @app.get("port"), (error) =>
       if error?
-        log.error "Failed to start server: %s", error
+        @log.error "Failed to start server: #{error}"
       else
-        log.info "Widget-Server ready on port %d", @app.get("port")
+        @log.info "Widget-Server ready on port #{@app.get("port")}"
       next() if next?

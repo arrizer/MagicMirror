@@ -4,10 +4,11 @@ Express = require 'express'
 CoffeeScript = require 'coffeescript'
 Static       = require 'serve-static'
 
-log = require './Log'
+Log = require('./Log')
 
 module.exports = class Widget
   constructor: (@path, @language) ->
+    @log = new Log("Widget #{@path}")
     @router = Express.Router()
   
   load: (next) ->
@@ -24,7 +25,7 @@ module.exports = class Widget
                 next()
 
   readInfo: (next) ->
-    log.debug '- Parsing info.json'
+    @log.debug 'Parsing info.json'
     infoFilePath = Path.join @path, 'info.json'
     FileSystem.readFile infoFilePath, (error, data) =>
       return next new Error("Failed to read info.json file: " + error) if error?
@@ -37,7 +38,7 @@ module.exports = class Widget
       next()
       
   readStrings: (next) ->
-    log.debug '- Parsing strings.json'
+    @log.debug 'Parsing strings.json'
     infoFilePath = Path.join @path, 'strings.json'
     FileSystem.readFile infoFilePath, (error, data) =>
       return next() if error?
@@ -53,7 +54,7 @@ module.exports = class Widget
       next()
       
   compileClient: (next) ->
-    log.debug '- Compiling widget.coffee'
+    @log.debug 'Compiling widget.coffee'
     path = Path.join @path, 'widget.coffee'
     FileSystem.readFile path, (error, data) =>
       return next new Error("Failed to read widget.coffee file: " + error) if error?
@@ -66,7 +67,7 @@ module.exports = class Widget
       next()
       
   loadTemplate: (next) ->
-    log.debug '- Loading template.html'
+    @log.debug 'Loading template.html'
     path = Path.join @path, 'template.html'
     FileSystem.readFile path, (error, data) =>
       return next new Error("Failed to read template.html file: " + error) if error?
@@ -95,15 +96,15 @@ module.exports = class Widget
 class WidgetInstance
   constructor: (@widget, @config, id) ->
     @id = @widget.info.name + '/' + id
-    logPrefix = @id
-    log.debug 'Creating widget instance %s', @id
+    @log = new Log("Widget #{@id}")
+    @log.debug "Creating widget instance"
     @endpoints = {}
     @router = Express.Router()
     @server =
       log:
-        debug: (message) -> log.debug("#{logPrefix}: #{message}")
-        info: (message) -> log.info("#{logPrefix}: #{message}")
-        error: (message) -> log.error("#{logPrefix}: #{message}")
+        debug: (message) => @log.debug(message.toString())
+        info: (message) => @log.info(message.toString())
+        error: (message) => @log.error(message.toString())
       config: @config
       handle: (endpoint, handler) =>
         @endpoints[endpoint] = handler
@@ -117,29 +118,29 @@ class WidgetInstance
     try
       @widget.serverFactory @server if @widget.serverFactory?
     catch error
-      return log.error 'Error while creating widget instance of %s: %s', @id, error
+      return @log.error "Error while creating widget instance: #{error}"
     @mount()
     
   init: (next) ->
-    log.debug 'Initializing widget instance %s', @id
+    @log.debug "Initializing widget instance"
     @server.init (error) =>
       if error?
-        log.error 'Failed to initialized widget instance %s: %s', @id, error
+        @log.error "Failed to initialized widget instance #{error}"
         next error
       else
-        log.debug 'Successfully initialized widget instance %s', @id
+        @log.debug "Successfully initialized widget instance"
         next()
         
   mount: ->
     for endpoint, handler of @endpoints
       path = @id + '/' + endpoint
-      log.debug '- Mounting server-handler %s', path
+      @log.debug "Mounting server-handler: #{path}"
       @router.get '/' + endpoint, (req, res) =>
-        log.debug 'Incoming endpoint request for %s, parameters:', path, req.query
-        onResult = (result) -> 
-          log.debug "Responding to %s with response:\n%s", path, JSON.stringify(result, null, 2)
+        @log.debug "Incoming endpoint request for #{path}, parameters: #{JSON.stringify(req.query)}"
+        onResult = (result) => 
+          @log.debug "Responding to #{path} with response:\n#{JSON.stringify(result, null, 2)}"
           res.json (success: yes, response: result)
-        onError = (error) -> 
-          log.error 'Responding to %s with error:', path, error
+        onError = (error) => 
+          @log.error "Responding to #{path} with error: #{error}"
           res.json (success: no, error: "#{error}")
         handler req.query, onResult, onError

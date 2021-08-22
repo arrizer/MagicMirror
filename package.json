@@ -11,6 +11,7 @@
   "dependencies": {
     "async": "*",
     "body-parser": "*",
+    "cli-color": "^2.0.0",
     "coffeescript": "^2.4.1",
     "dav": "^1.7.8",
     "express": "*",
@@ -21,7 +22,6 @@
     "request-promise-native": "^1.0.7",
     "rss-watcher": "^1.4.0",
     "serve-static": "*",
-    "vcard": "^0.1.0",
-    "winston": "^2.2.0"
+    "vcard": "^0.1.0"
   }
 }

@@ -5,18 +5,19 @@ Express = require 'express'
 CoffeeScript = require 'coffeescript'
 Widget = require './Widget'
 
-log = require './Log'
+Log = require './Log'
 
 module.exports = class WidgetRuntime
   constructor: (@widgetsDirectory, @clientScriptPath, @config) ->
+    @log = new Log("WidgetRuntime")
     @widgets = {}
     @widgetInstances = []
     @router = Express.Router()
   
   load: (next) ->
-    log.debug 'Loading available widgets from %s', @widgetsDirectory
+    @log.debug "Loading available widgets from #{@widgetsDirectory}"
     FileSystem.readdir @widgetsDirectory, (error, items) =>
-      return log.error error if error?
+      return @log.error error if error?
       Async.eachSeries items, (item, next) =>
         path = Path.join @widgetsDirectory, item
         FileSystem.stat path, (error, stats) =>
@@ -28,11 +29,11 @@ module.exports = class WidgetRuntime
       , next
         
   loadWidget: (path, next) ->
-    log.info 'Loading widget at %s', path
+    @log.info "Loading widget at #{path}"
     widget = new Widget(path, @config.language)
     widget.load (error) =>
       if error?
-        log.error error
+        @log.error error
       else
         @widgets[widget.info.name] = widget
         @router.use '/' + widget.info.name, widget.router

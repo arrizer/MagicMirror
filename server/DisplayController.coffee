@@ -1,7 +1,8 @@
 Express = require 'express'
 ChildProcess = require 'child_process'
 
-log = require './Log'
+Log = require('./Log')
+log = new Log("DisplayController")
 
 module.exports = class DisplayController
   constructor: (@widgetsDirectory, @clientScriptPath, @config) ->
