@@ -1,4 +1,5 @@
 Netatmo = require 'netatmo'
+Util = require 'util'
 
 module.exports = (server) =>
   log = server.log
@@ -46,7 +47,7 @@ module.exports = (server) =>
     return station
 
   server.handle 'stations', (query, respond, fail) ->
-    netatmo.getDevicelist (error, devices, modules) ->
+    netatmo.getStationsData (error, devices) ->
       return fail(error) if error?
       devices = devices.filter((device) -> server.config.stations.indexOf(device.station_name) isnt -1)
       return fail("No devices found") if devices.length == 0
@@ -54,9 +55,7 @@ module.exports = (server) =>
       for device in devices
         station = stationFromObject(device)
         stations.push(station) if station?
-        modules = modules.filter (module) ->
-          device.modules.indexOf(module._id) isnt -1
-        for module in modules
+        for module in device.modules
           station = stationFromObject(module)
           stations.push(station) if station?
       orderedStations = []
