@@ -17,7 +17,6 @@
     "express": "*",
     "feedparser": "^1.1.4",
     "hogan-express": "*",
-    "netatmo": "^2.3.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "rss-watcher": "^1.4.0",
