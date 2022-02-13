@@ -49,23 +49,6 @@
   float: left;
   margin-top: 6px;
   border-radius: 6px;
-  filter: blur(2px);
-}
-
-.netatmo .metric .quality.good {
-  background-color: #a9ff9e;
-}
-
-.netatmo .metric .quality.fair {
-  background-color: #fffc60;
-}
-
-.netatmo .metric .quality.inferior {
-  background-color: #ff9b28;
-}
-
-.netatmo .metric .quality.bad {
-  background-color: #ff5151;
 }
 
 .netatmo .metric .value {

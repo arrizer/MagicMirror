@@ -25,14 +25,12 @@ module.exports = (server) =>
         value: value
         unit: units[key]
       if key is 'CO2'
-        if value <= 1000
-          metric.quality = 'good'
-        else if value <= 1500
-          metric.quality = 'fair'
-        else if value <= 2000
-          metric.quality = 'inferior'
+        if value <= 800
+          metric.quality = 1
+        else if value >= 2000
+          metric.quality = 0
         else
-          metric.quality = 'bad'
+          metric.quality = 1 - ((value - 800) / (2000 - 800))
       metrics.push(metric)
     return metrics
 
