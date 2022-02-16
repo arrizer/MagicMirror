@@ -14,8 +14,10 @@ module.exports = (server) =>
       url: "https://api.corona-zahlen.org/germany"
       json: yes
     log.info "Loading #{request.url}"
-    Request request, (error, _, data) ->
+    Request request, (error, response, data) ->
+      console.log data
       return next(error) if error?
+      return next("HTTP #{response.statusCode}") if response.statusCode != 200
       if data.error?
         log.error "Failed to load stats: #{JSON.stringify(data)}"
         return next(JSON.stringify(data))
@@ -54,8 +56,9 @@ module.exports = (server) =>
   getVaccinationProgress = (next) ->
     request =
       url: "https://impfdashboard.de/static/data/germany_vaccinations_timeseries_v2.tsv"
-    Request request, (error, _, body) ->
+    Request request, (error, response, body) ->
       return next(error) if error?
+      return next("HTTP #{response.statusCode}") if response.statusCode != 200
       lines = body.split("\n")
       keys = lines.shift().split("\t")
       lines.pop()
