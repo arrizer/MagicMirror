@@ -24,26 +24,24 @@ module.exports = (server) =>
       return next error if error?
       return next new Error("No rain forecast available for the region") if !result?
       rain = {}
-      if result.intensity < 0.33
-        result.intensity = 1
-      else if result.intensity < 0.77
-        result.intensity = 2
-      else
-        result.intensity = 3
+      unless result.intensity is -1
+        if result.intensity < 0.33
+          rain.intensity = 1
+        else if result.intensity < 0.77
+          rain.intensity = 2
+        else
+          rain.intensity = 3
         
       if result.startMin is -1 and result.endMin is -1
         rain.state = 'clear'
       else if result.startMin > 0
         rain.state = 'predicted-begin'
         rain.minutes = result.startMin
-        rain.intensity = result.intensity
       else if result.endMin > 0
         rain.state = 'predicted-end'
         rain.minutes = result.endMin
-        rain.intensity = result.intensity
       else
         rain.state = 'raining'
-        rain.intensity = result.intensity
       next null, rain
         
   server.init = (next) ->
