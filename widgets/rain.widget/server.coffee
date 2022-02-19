@@ -32,7 +32,7 @@ module.exports = (server) =>
         else
           rain.intensity = 3
         
-      if result.startMin is -1 and result.endMin is -1
+      if (result.startMin is -1 and result.endMin is -1) or !rain.intensity?
         rain.state = 'clear'
       else if result.startMin > 0
         rain.state = 'predicted-begin'
