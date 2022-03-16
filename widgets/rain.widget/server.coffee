@@ -23,6 +23,7 @@ module.exports = (server) =>
     Request (url: url, json: yes), (error, response, result) ->
       return next error if error?
       return next new Error("No rain forecast available for the region") if !result?
+      return next new Error("Unexpected API response: #{response}") unless result.intensity? and result.startMin? and result.endMin?
       rain = {}
       unless result.intensity is -1
         if result.intensity < 0.33
