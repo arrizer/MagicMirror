@@ -37,7 +37,6 @@ module.exports = (server) =>
 
   server.handle 'quotes', (query, respond, fail) ->
     ranges = [
-      (key: '1day', range: '1d', interval: '1m'),
       (key: '5days', range: '5d', interval: '1m'),
       (key: '1month', range: '1mo', interval: '1d')
     ]
