@@ -2,6 +2,10 @@
   container = widget.div.find('.container')
   container.text widget.string("loading")
 
+  CURRENCY_SYMBOLS =
+    EUR: '€'
+    USD: '$'
+
   widget.loadPeriodic 'quotes', 60 * 5, (error, items) ->
     container.empty()
     if error?
@@ -11,6 +15,8 @@
       itemEl = $('<div>').addClass('item').appendTo(container)
       $('<div>').addClass('title').text(item.title).appendTo(itemEl)
       quotesEl = $('<div>').addClass('quotes').appendTo(itemEl)
+      currency = CURRENCY_SYMBOLS[item.currency] or item.currency
+      $('<div>').addClass('price').text("#{widget.util.formatNumber(item.price, (maximumFractionDigits: 2, minimumFractionDigits: 2))} #{currency}").appendTo(quotesEl)
       for quote in item.quotes
         quoteEl = $('<div>').addClass('quote').appendTo(quotesEl)
         quoteEl.addClass("trend_#{quote.trend}")

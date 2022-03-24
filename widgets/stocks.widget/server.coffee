@@ -19,6 +19,7 @@ module.exports = (server) =>
       try
         return next(new Error("Yahoo Finance API Error: #{response.error.code}: #{response.error.description}")) if response.error?
         response = response.chart
+        console.log response.result[0]
         result = response.result[0]
         previousClose = result.meta.previousClose
         quote = result.indicators.quote[0]
@@ -30,6 +31,8 @@ module.exports = (server) =>
         chart =
           priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
           priceClose: closePrices[closePrices.length - 1]
+          price: result.meta.regularMarketPrice
+          currency: result.meta.currency
         chart.changePercentage = ((chart.priceClose / chart.priceOpen) - 1) * 100
         next(null, chart)
       catch error
@@ -50,6 +53,8 @@ module.exports = (server) =>
             change: chart.changePercentage
             open: chart.priceOpen
             close: chart.priceClose
+            price: chart.price
+            currency: chart.currency
             trend: if chart.changePercentage >= 0 then 'up' else 'down'
           done(null, result)
       , (error, results) ->
@@ -57,6 +62,8 @@ module.exports = (server) =>
         result =
           title: quote.title
           symbol: quote.symbol
+          price: results[0].price
+          currency: results[0].currency
           quotes: results
         done(null, result)
     , (error, results) ->
