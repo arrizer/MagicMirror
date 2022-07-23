@@ -21,8 +21,8 @@ html {
 }
 
 .widget_container {
-  padding-top: 10px;
-  padding-bottom: 10px;  
+  padding-top: 20px;
+  padding-bottom: 20px;  
   box-sizing: border-box;
   position: relative;
 }
