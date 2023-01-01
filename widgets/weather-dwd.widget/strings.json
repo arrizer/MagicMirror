@@ -1,0 +1,14 @@
+{
+  "en" : {
+    "unit.temperature.celsius": "°C",
+    "unit.temperature.fahrenheit": "°F",
+    "loading": "Loading weather data...",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "de" : {
+    "loading": "Wetterdaten werden geladen...",
+    "today": "Heute",
+    "tomorrow": "Morgen"
+  }
+}
