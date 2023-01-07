@@ -23,12 +23,20 @@ module.exports = (server) =>
     openWindows: (config, next) ->
       values = []
       for name,value of config.objects
-        values.push(value)
+        if Array.isArray(value)
+          values = values.concat(value)
+        else
+          values.push(value)
       loadObjects values, (error, values) ->
         return next(error) if error?
         data = {}
         for name,value of config.objects
-          data[name] = values[value].val
+          if Array.isArray(value)
+            data[name] = false
+            for subvalue in value
+              data[name] = true if values[subvalue].val
+          else
+            data[name] = values[value].val
         next(null, data)
 
   server.handle 'views', (query, respond, fail) ->
