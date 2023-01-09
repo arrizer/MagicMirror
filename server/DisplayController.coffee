@@ -1,27 +1,29 @@
-Express = require 'express'
 ChildProcess = require 'child_process'
+KoaRouter = require 'koa-router'
 
 Log = require('./Log')
-log = new Log("DisplayController")
 
 module.exports = class DisplayController
   constructor: (@widgetsDirectory, @clientScriptPath, @config) ->
+    @log = new Log("DisplayController")
     @isOn = true
-    @router = Express.Router()
-    @router.get '/display-power', (req, res) =>
-      res.send(if @isOn then '1' else '0')
-    @router.put '/display-power', (req, res) =>
-      command = req.query.on
-      return res.status(400).send("URL parameter 'on' must be either '1' or '0'") unless command? and command is '1' or command is '0'
-      @setOn (command is '1'), (error) =>
-        return res.status(500).send("Command failed") if error?
-        res.status(200).send("Set display power to #{command}")
+    @router = new KoaRouter()
+    @router.get '/display-power', (ctx) =>
+      ctx.body = (if @isOn then '1' else '0')
+    @router.put '/display-power', (ctx) =>
+      isOn = ctx.query.on
+      ctx.assert(isOn is '1' or isOn is '0', 400, "URL parameter 'on' must be either '1' or '0'")
+      await @setOn (isOn is '1')
+      res.status = 200
+      res.body "Set display power to #{isOn}"
 
-  setOn: (isOn, next) ->
+  setOn: (isOn) ->
     command = "vcgencmd display_power #{if isOn then '1' else '0'}"
-    ChildProcess.exec command, (error) =>
-      if error?
-        log.error "Failed to run command '#{command}': #{error}"
-      else
-        @isOn = isOn
-      next(error)
+    new Promise (resolve, reject) =>
+      ChildProcess.exec command, (error) =>
+        if error?
+          @log.error "Failed to run command '#{command}': #{error}"
+          reject(error)
+        else
+          @isOn = isOn
+          resolve()

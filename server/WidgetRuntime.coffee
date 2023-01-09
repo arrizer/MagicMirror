@@ -1,8 +1,7 @@
-FileSystem = require 'fs'
-Path = require 'path'
-Async = require 'async'
-Express = require 'express'
 CoffeeScript = require 'coffeescript'
+FileSystem = require('fs').promises
+KoaRouter = require 'koa-router'
+Path = require 'path'
 Widget = require './Widget'
 
 Log = require './Log'
@@ -12,78 +11,63 @@ module.exports = class WidgetRuntime
     @log = new Log("WidgetRuntime")
     @widgets = {}
     @widgetInstances = []
-    @router = Express.Router()
+    @router = new KoaRouter()
   
-  load: (next) ->
+  load: (onlyWidget) ->
     @log.debug "Loading available widgets from #{@widgetsDirectory}"
-    FileSystem.readdir @widgetsDirectory, (error, items) =>
-      return @log.error error if error?
-      Async.eachSeries items, (item, next) =>
-        path = Path.join @widgetsDirectory, item
-        FileSystem.stat path, (error, stats) =>
-          return next() if error?
-          if stats.isDirectory() and Path.extname(path) is '.widget'
-            @loadWidget path, next
-          else
-            next()
-      , next
+    items = await FileSystem.readdir(@widgetsDirectory)
+    for item in items
+      continue if onlyWidget? and item != "#{onlyWidget}.widget"
+      path = Path.join @widgetsDirectory, item
+      stats = await FileSystem.stat(path)
+      if stats.isDirectory() and Path.extname(path) is '.widget'
+        await @loadWidget(path)
         
-  loadWidget: (path, next) ->
+  loadWidget: (path) ->
     @log.info "Loading widget at #{path}"
     widget = new Widget(path, @config.language)
-    widget.load (error) =>
-      if error?
-        @log.error error
-      else
-        @widgets[widget.info.name] = widget
-        @router.use '/' + widget.info.name, widget.router
-      next()
+    try
+      await widget.load()
+      @widgets[widget.info.name] = widget
+      @router.use '/' + widget.info.name, widget.router.routes()
+    catch error
+      @log.error "Error loading widget: #{error}"
   
-  startWidgets: (config, next) ->
+  startWidgets: (widgetConfigs) ->
     counter = 1
-    Async.eachSeries config, (config, next) =>
+    for config in widgetConfigs
       widget = @widgets[config.widget]
-      if widget?
-        instance = widget.instantiate(config.config, counter++)
-        instance.init (error) => 
-          @widgetInstances.push instance unless error?
-          next error
-      else
-        next new Error('Unknown widget: ' + config.widget)
-    , (error) =>
-      @mount() unless error?
-      next error
+      throw new Error("Unknown widget: #{config.widget}") unless widget?
+      instance = widget.instantiate(config.config, counter++)
+      await instance.init()
+      @widgetInstances.push(instance)
+    @mount()
 
-  compileClientScript: (next) ->
-    FileSystem.readFile @clientScriptPath, (error, data) =>
-      return next(error) if error?
-      script = "var widgetFactories = {};\n"
-      for name,widget of @widgets
-        script += 'widgetFactories["' + name + '"] = ' + widget.clientScript + ";\n"
-      try
-        script += CoffeeScript.compile data.toString(), (header:no, bare:yes)
-      catch error
-        return next(error)
-      next(null, script)
+  compileClientScript: ->
+    data = await FileSystem.readFile(@clientScriptPath)
+    script = "var widgetFactories = {};\n"
+    for name,widget of @widgets
+      script += 'widgetFactories["' + name + '"] = ' + widget.clientScript + ";\n"
+    script += CoffeeScript.compile(data.toString(), (header:no, bare:yes))
+    return script
       
   mount: ->
-    @router.get '/', (req, res) =>
-      @compileClientScript (error, clientScript) =>
-        return res.status(500).send(error) if error?
-        instances = []
-        widgets = []
-        for instance in @widgetInstances
-          instances.push
-            widget: instance.widget.info.name
-            instanceID: instance.id
-            config: instance.config
-        for name,widget of @widgets
-          widgets.push
-            name: name
-            template: widget.template
-            strings: (if widget.strings? then JSON.stringify(widget.strings) else '{}')
-        res.render 'client',
-          widgets: widgets
-          widget_instances: JSON.stringify(instances)
-          config: JSON.stringify(@config)
-          client: clientScript
+    @router.get '/', (ctx) =>
+      clientScript = await @compileClientScript()
+      instances = []
+      widgets = []
+      for instance in @widgetInstances
+        instances.push
+          widget: instance.widget.info.name
+          instanceID: instance.id
+          config: instance.config
+      for name,widget of @widgets
+        widgets.push
+          name: name
+          template: widget.template
+          strings: (if widget.strings? then JSON.stringify(widget.strings) else '{}')
+      ctx.render 'client',
+        widgets: widgets
+        widget_instances: JSON.stringify(instances)
+        config: JSON.stringify(@config)
+        client: clientScript

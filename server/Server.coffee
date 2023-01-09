@@ -1,16 +1,13 @@
+FileSystem = require 'fs'
+Koa = require 'koa'
+KoaBody = require('koa-body').koaBody
+KoaStatic = require 'koa-static'
+KoaViews = require 'koa-views'
+Path = require 'path'
 
-Express      = require 'express'
-BodyParser   = require 'body-parser'
-Static       = require 'serve-static'
-HTTP         = require 'http'
-Path         = require 'path'
-FileSystem   = require 'fs'
-Hogan        = require 'hogan-express'
-
-WidgetRuntime = require './WidgetRuntime'
 DisplayController = require './DisplayController'
-
 Log = require './Log'
+WidgetRuntime = require './WidgetRuntime'
 
 module.exports = class Server
   DEFAULT_PORT = 8080
@@ -19,19 +16,10 @@ module.exports = class Server
     @log = new Log("Server")
     @log.debug 'Setting up server...'
     @parseArguments()
-    app = Express()
-    app.enable 'trust proxy'
-    app.disable 'x-powered-by'
-    app.set "port", (@config.port or DEFAULT_PORT)
-    app.set "views", Path.join(@config.path, 'server', 'client')
-    app.set 'view engine', 'html'
-    app.enable 'view cache'
-    app.engine 'html', Hogan
-    
-    # Middleware
-    app.use BodyParser.json()
-    app.use Static(Path.join(@config.path, 'server', 'static'))
-    @app = app
+    @app = new Koa()
+    @app.use KoaViews(Path.join(@config.path, 'server', 'client'), (map: (html: 'mustache')))
+    @app.use KoaStatic(Path.join(@config.path, 'server', 'static'))
+    @app.use KoaBody()
 
   parseArguments: ->
     @args = {}
@@ -43,26 +31,20 @@ module.exports = class Server
         @args[key] = value
         @log.debug "Launch argument: #{key}=#{value}"      
   
-  start: (next) ->
+  start: ->
     @displayController = new DisplayController()
     @runtime = new WidgetRuntime(Path.join(@config.path, 'widgets'), Path.join(@config.path, 'server', 'client', 'client.coffee'), @config)
-    @runtime.load =>
-      widgets = @config.widgets
-      if @args['only-widget']?
-        widgets = widgets.filter((item) => item.widget == @args['only-widget'])
-      @runtime.startWidgets widgets, (error) =>
-        if error?
-          @log.error "Failed to start widgets: #{error}"
-          next error if next?
-        else
-          @app.use @runtime.router
-          @app.use @displayController.router
-          @startServer next
+    onlyWidget = @args['only-widget']
+    await @runtime.load(onlyWidget)
+    widgets = @config.widgets
+    if onlyWidget?
+      widgets = widgets.filter((item) => item.widget == onlyWidget)
+    await @runtime.startWidgets(widgets)
+    @app.use @runtime.router.routes()
+    @app.use @displayController.router.routes()
+    @startServer()
         
-  startServer: (next) ->
-    HTTP.createServer(@app).listen @app.get("port"), (error) =>
-      if error?
-        @log.error "Failed to start server: #{error}"
-      else
-        @log.info "Widget-Server ready on port #{@app.get("port")}"
-      next() if next?
+  startServer: ->
+    port = @config.port or DEFAULT_PORT
+    @app.listen(port)
+    @log.info "Widget-Server ready on port #{port}"

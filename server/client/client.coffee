@@ -1,5 +1,5 @@
 $ -> 
-  decode = (s) -> s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&')
+  decode = (s) -> he.decode(s)
 
   class Dashboard
     constructor: (@dashboard) ->
