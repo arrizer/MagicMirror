@@ -16,6 +16,7 @@ module.exports = (server) =>
       log.info "Loading #{request.url}"
       Request request, (error, response, body) ->
         return done(error) if error?
+        return done(new Error("Unexpected API response: #{JSON.stringify(body)}")) unless response.statusCode == 200 and body.mvgLiveResponse? and body.mvgLiveResponse.departures?
         result =
           station: station.station
           walkingDistanceMinutes: station.walkingDistanceMinutes
