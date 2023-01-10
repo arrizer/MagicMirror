@@ -9,12 +9,9 @@
     "start": "coffee app.coffee"
   },
   "dependencies": {
-    "async": "*",
-    "bent": "^7.3.12",
     "cli-color": "^2.0.0",
     "coffeescript": "^2.4.1",
     "dav": "^1.7.8",
-    "feedparser": "^1.1.4",
     "form-urlencoded": "^6.1.0",
     "koa": "^2.14.1",
     "koa-body": "^6.0.1",
@@ -22,9 +19,6 @@
     "koa-static": "^5.0.0",
     "koa-views": "^8.0.0",
     "mustache": "^4.2.0",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "rss-watcher": "^1.4.0",
     "vcard": "^0.1.0"
   }
 }

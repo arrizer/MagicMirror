@@ -1,6 +1,5 @@
 KoaRouter = require 'koa-router'
 Path = require 'path'
-Bent = require 'bent'
 
 Log = require './Log'
 HTTPClient = require './HTTPClient'
