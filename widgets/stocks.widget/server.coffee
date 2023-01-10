@@ -1,71 +1,52 @@
-Request = require 'request'
-Async = require 'async'
-
 module.exports = (server) =>
   log = server.log
 
-  loadChart = (symbol, range, interval, next) ->
-    url = "https://query1.finance.yahoo.com/v8/finance/chart/#{encodeURIComponent(symbol)}"
-    log.debug "Loading stock data from: #{url}"
-    request =
-      url: url
-      qs:
-        range: range
-        interval: interval
-        includePrePost: no
-      json: yes
-    Request request, (error, _, response) ->
-      return next(error) if error?
-      try
-        return next(new Error("Yahoo Finance API Error: #{response.error.code}: #{response.error.description}")) if response.error?
-        response = response.chart
-        console.log response.result[0]
-        result = response.result[0]
-        previousClose = result.meta.previousClose
-        quote = result.indicators.quote[0]
-        openPrices = [if previousClose? then previousClose else 0]
-        closePrices = [if previousClose? then previousClose else 0]
-        if quote.open? and quote.close?
-          openPrices = quote.open.filter((v) -> v?)
-          closePrices = quote.close.filter((v) -> v?)
-        chart =
-          priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
-          priceClose: closePrices[closePrices.length - 1]
-          price: result.meta.regularMarketPrice
-          currency: result.meta.currency
-        chart.changePercentage = ((chart.priceClose / chart.priceOpen) - 1) * 100
-        next(null, chart)
-      catch error
-        next(new Error("Yahoo Finance API parsing error: #{error}"))
+  loadChart = (symbol, range, interval) ->
+    url = "https://query1.finance.yahoo.com/v8/finance/chart/#{encodeURIComponent(symbol)}?range=#{range}&interval=#{interval}&includePrePost=no"
+    response = await server.http.getJSON(url)
+    throw new Error("Yahoo Finance API Error: #{response.error.code}: #{response.error.description}") if response.error?
+    response = response.chart
+    result = response.result[0]
+    previousClose = result.meta.previousClose
+    quote = result.indicators.quote[0]
+    openPrices = [if previousClose? then previousClose else 0]
+    closePrices = [if previousClose? then previousClose else 0]
+    if quote.open? and quote.close?
+      openPrices = quote.open.filter((v) -> v?)
+      closePrices = quote.close.filter((v) -> v?)
+    chart =
+      priceOpen: if range is '1d' and previousClose? then previousClose else openPrices[0]
+      priceClose: closePrices[closePrices.length - 1]
+      price: result.meta.regularMarketPrice
+      currency: result.meta.currency
+    chart.changePercentage = ((chart.priceClose / chart.priceOpen) - 1) * 100
+    return chart
 
-  server.handle 'quotes', (query, respond, fail) ->
+  server.handle 'quotes', (query) ->
     ranges = [
       (key: '5days', range: '5d', interval: '1m'),
       (key: '1month', range: '1mo', interval: '1d')
     ]
-    Async.map server.config.quotes, (quote, done) ->
+    results = []
+    for quote in server.config.quotes
       log.info "Loading stock quote for #{quote.title} [#{quote.symbol}]"
-      Async.map ranges, (range, done) ->
-        loadChart quote.symbol, range.range, range.interval, (error, chart) ->
-          return done(error) if error?
-          result =
-            range: range.key
-            change: chart.changePercentage
-            open: chart.priceOpen
-            close: chart.priceClose
-            price: chart.price
-            currency: chart.currency
-            trend: if chart.changePercentage >= 0 then 'up' else 'down'
-          done(null, result)
-      , (error, results) ->
-        return done(error) if error?
+      charts = []
+      for range in ranges
+        chart = await loadChart(quote.symbol, range.range, range.interval)
         result =
-          title: quote.title
-          symbol: quote.symbol
-          price: results[0].price
-          currency: results[0].currency
-          quotes: results
-        done(null, result)
-    , (error, results) ->
-      return fail(error) if error?
-      respond(results)
+          range: range.key
+          change: chart.changePercentage
+          open: chart.priceOpen
+          close: chart.priceClose
+          price: chart.price
+          currency: chart.currency
+          trend: if chart.changePercentage >= 0 then 'up' else 'down'
+        charts.push(result)      
+      result =
+        title: quote.title
+        symbol: quote.symbol
+        price: charts[0].price
+        currency: charts[0].currency
+        quotes: charts
+      results.push(result)
+    return results

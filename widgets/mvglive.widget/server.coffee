@@ -1,27 +1,15 @@
-Request = require 'request'
-Async = require 'async'
-
 module.exports = (server) =>
   log = server.log
-    
-  server.init = (next) ->
-    next()
-    
-  server.handle 'departures', (query, respond, fail) ->
+        
+  server.handle 'departures', (query) ->
     config = server.config
-    Async.mapSeries config.stations, (station, done) ->
-      request =
-        url: "http://www.mvg-live.de/serviceV1/departures/#{encodeURIComponent(station.station)}/json?apiKey=#{config.mvglive_api_key}&maxEntries=50"
-        json: yes
-      log.info "Loading #{request.url}"
-      Request request, (error, response, body) ->
-        return done(error) if error?
-        return done(new Error("Unexpected API response: #{JSON.stringify(body)}")) unless response.statusCode == 200 and body.mvgLiveResponse? and body.mvgLiveResponse.departures?
-        result =
-          station: station.station
-          walkingDistanceMinutes: station.walkingDistanceMinutes
-          departures: body.mvgLiveResponse.departures
-        done(null, result)
-    , (error, results) ->
-      return fail(error) if error?
-      respond(results)
+    results = []
+    for station in config.stations
+      body = await server.http.getJSON "http://www.mvg-live.de/serviceV1/departures/#{encodeURIComponent(station.station)}/json?apiKey=#{config.mvglive_api_key}&maxEntries=50"
+      throw new Error("Unexpected API response: #{JSON.stringify(body)}") unless body.mvgLiveResponse? and body.mvgLiveResponse.departures?
+      result =
+        station: station.station
+        walkingDistanceMinutes: station.walkingDistanceMinutes
+        departures: body.mvgLiveResponse.departures
+      results.push(result)
+    return results

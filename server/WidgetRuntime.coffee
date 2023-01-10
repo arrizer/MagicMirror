@@ -13,11 +13,10 @@ module.exports = class WidgetRuntime
     @widgetInstances = []
     @router = new KoaRouter()
   
-  load: (onlyWidget) ->
+  load: ->
     @log.debug "Loading available widgets from #{@widgetsDirectory}"
     items = await FileSystem.readdir(@widgetsDirectory)
     for item in items
-      continue if onlyWidget? and item != "#{onlyWidget}.widget"
       path = Path.join @widgetsDirectory, item
       stats = await FileSystem.stat(path)
       if stats.isDirectory() and Path.extname(path) is '.widget'
@@ -34,11 +33,13 @@ module.exports = class WidgetRuntime
       @log.error "Error loading widget: #{error}"
   
   startWidgets: (widgetConfigs) ->
-    counter = 1
+    instanceCounts = {}
     for config in widgetConfigs
       widget = @widgets[config.widget]
       throw new Error("Unknown widget: #{config.widget}") unless widget?
-      instance = widget.instantiate(config.config, counter++)
+      id = instanceCounts[config.widget] or 0
+      instance = widget.instantiate(config.config, id)
+      instanceCounts[config.widget] = id + 1
       @router.use '/' + instance.id, instance.router.routes()
       await instance.init()
       @widgetInstances.push(instance)

@@ -1,58 +1,45 @@
-Request = require 'request'
-Async = require 'async'
-
 module.exports = (server) =>
   log = server.log
 
-  loadObjects = (values, next) ->
+  loadObjects = (values) ->
     valuesParameter = values.map((value) -> encodeURIComponent(value)).join(',')
-    request =
-      url: "#{server.config.baseURL}/get/#{valuesParameter}/?prettyPrint"
-      json: yes
-    log.debug("Loading objects: #{request.url}")
-    Request request, (error, response, body) ->
-      if error?
-        log.error("Error loading objects #{request.url}: #{error}")
-        return next(error)
-      result = {}
-      for item in body
-        result[item._id] = item
-      next(null, result)
+    body = await server.http.getJSON("#{server.config.baseURL}/get/#{valuesParameter}/?prettyPrint")
+    result = {}
+    for item in body
+      result[item._id] = item
+    return result
 
   views =
-    openWindows: (config, next) ->
-      values = []
+    openWindows: (config) ->
+      objects = []
       for name,value of config.objects
         if Array.isArray(value)
-          values = values.concat(value)
+          objects = objects.concat(value)
         else
-          values.push(value)
-      loadObjects values, (error, values) ->
-        return next(error) if error?
-        data = {}
-        for name,value of config.objects
-          if Array.isArray(value)
-            data[name] = false
-            for subvalue in value
-              data[name] = true if values[subvalue].val
-          else
-            data[name] = values[value].val
-        next(null, data)
+          objects.push(value)
+      values = await loadObjects(objects)
+      data = {}
+      for name,value of config.objects
+        if Array.isArray(value)
+          data[name] = false
+          for subvalue in value
+            data[name] = true if values[subvalue].val
+        else
+          data[name] = values[value].val
+      return data
 
-  server.handle 'views', (query, respond, fail) ->
-    Async.map server.config.views, (config, done) ->
+  server.handle 'views', (query) ->
+    results = []
+    for config in server.config.views
       handler = views[config.view]
       result = {}
       result.view = config.view
       if handler?
-        handler config, (error, data) ->
-          if error?
-            result.error = error.toString() 
-          else
-            result.data = data
-          done(null, result)
+        try
+          result.data = await handler(config)
+        catch error
+          result.error = error.toString()
       else
         result.error = "Unknown view '#{config.view}'"
-        done(null, result)
-    , (error, views) ->
-      respond(views)
+      results.push(result)
+    return results
