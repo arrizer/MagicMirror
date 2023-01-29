@@ -16,7 +16,7 @@
         else
           text = windows[0]
         text = widget.string("openWindows.open", text)
-        $('<img/>').addClass('icon').attr('src', '/iobroker/resources/open-window.png').appendTo(div)
+        $('<img/>').addClass('icon').attr('src', '/homematic/resources/open-window.png').appendTo(div)
         $('<div/>').addClass('item').text(text).appendTo(div)
       else
         div.hide()
