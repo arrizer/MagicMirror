@@ -15,6 +15,12 @@ module.exports = class HTTPClient
       method: 'GET'
       url: url
       responseContentType: 'json'
+
+  post: (url, requestBody) =>
+    await @request
+      method: 'POST'
+      url: url
+      requestBody: requestBody
   
   postJSON: (url, requestBody) =>
     await @request

@@ -1,19 +1,19 @@
-.iobroker .container {
+.homematic .container {
   text-align: center;
 }
 
-.iobroker .view {
+.homematic .view {
   display: inline-block;
   text-align: center;
 }
 
-.iobroker .openWindows .item {
+.homematic .openWindows .item {
   display: inline-block;
   float: left;
   font-size: 30px;
 }
 
-.iobroker .openWindows .icon {
+.homematic .openWindows .icon {
   display: inline-block;
   float: left;
   margin-right: 10px;

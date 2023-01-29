@@ -1,31 +1,37 @@
+XMLRPC = require 'xmlrpc'
+
 module.exports = (server) =>
   log = server.log
+  client = XMLRPC.createClient(host: server.config.ccuHost, port: 2001, path: '/')
 
-  loadObjects = (values) ->
-    valuesParameter = values.map((value) -> encodeURIComponent(value)).join(',')
-    body = await server.http.getJSON("#{server.config.baseURL}/get/#{valuesParameter}/?prettyPrint")
-    result = {}
-    for item in body
-      result[item._id] = item
-    return result
+  getValue = (address, key) ->
+    new Promise (resolve, reject) ->
+      server.log.debug "Getting value #{address} #{key}"
+      client.methodCall 'getValue', [address, key], (error, response) ->
+        return reject(error) if error?
+        resolve(response)
 
   views =
     openWindows: (config) ->
-      objects = []
+      values = []
       for name,value of config.objects
         if Array.isArray(value)
-          objects = objects.concat(value)
+          values = values.concat(value)
         else
-          objects.push(value)
-      values = await loadObjects(objects)
+          values.push(value)
+      results = {}
+      for value in values
+        address = value.split('.')[0]
+        key = value.split('.')[1]
+        results[value] = await getValue(address, key)
       data = {}
       for name,value of config.objects
         if Array.isArray(value)
           data[name] = false
           for subvalue in value
-            data[name] = true if values[subvalue].val
+            data[name] = true if results[subvalue]
         else
-          data[name] = values[value].val
+          data[name] = results[value]
       return data
 
   server.handle 'views', (query) ->
