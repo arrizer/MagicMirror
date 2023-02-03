@@ -16,6 +16,8 @@ LINE_COLORS =
   'S8': '#000000'
   'S20': '#ED6B83'
 
+MAX_DEPARTURE = 2 * 60 * 60 * 1000 # 2 hours
+
 module.exports = (server) =>
   log = server.log
 
@@ -40,6 +42,10 @@ module.exports = (server) =>
     results = []
     for station in stations
       body = await server.http.getJSON "https://www.mvg.de/api/fib/v2/departure?globalId=#{station.stationID}&limit=20"
+      now = new Date()
+      body = body.filter (departure) -> 
+        departureDate = new Date(parseInt(departure.realtimeDepartureTime))
+        return (departureDate - now) <= MAX_DEPARTURE
       result =
         station: station.station
         walkingDistanceMinutes: station.walkingDistanceMinutes

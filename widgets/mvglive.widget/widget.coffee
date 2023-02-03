@@ -7,6 +7,7 @@
     if error?
       container.text(error)
       return
+    now = new Date()
     for response in responses
       board = $('<div></div>').addClass('station').appendTo(container)
       $('<div></div>').addClass('name').text(response.station).appendTo(board)
@@ -30,8 +31,11 @@
         return 0
       previousLine = null
       for group in groups
-        times = group.times.map (time) ->
-          return Math.round((new Date(parseInt(time)) - new Date()) / (1000.0 * 60.0))
+        times = group.times.map (date) ->
+          departureDate = new Date(parseInt(date))
+          timeUntilDeparture = departureDate - now
+          minutes = Math.round(timeUntilDeparture / (1000.0 * 60.0))
+          return Math.max(minutes, 0)
         departureDiv = $('<div></div>').addClass('departure').appendTo(board)
         lineContainer = $('<div></div>').addClass('lineContainer').appendTo(departureDiv)
         $('<span></span>')
