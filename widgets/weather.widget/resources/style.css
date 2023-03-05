@@ -12,14 +12,14 @@
   text-align: center;
   width: 50px;
   height: 50px;
-  margin: 5px 0;
+  margin: 10px 0;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 50px;
 }
 
 .weather .container .day .name {
-  color: #AAA;
+  color: white;
 }
 
 .weather .container .day .temperatureMax {

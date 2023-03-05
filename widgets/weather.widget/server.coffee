@@ -30,7 +30,7 @@ module.exports = (server) =>
     throw new Error("WeatherKit API Error: #{body}") if body.error?
     days = body.forecastDaily.days[ .. 6].map (day) ->
       item =
-        date: Date(day.forecastStart)
+        date: new Date(day.forecastStart).toISOString()
         condition: day.conditionCode.toLowerCase()
         temperatureHigh: Math.round(day.temperatureMax)
         temperatureLow: Math.round(day.temperatureMin)
