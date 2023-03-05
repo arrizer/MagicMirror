@@ -31,7 +31,7 @@ module.exports = (server) =>
     days = body.forecastDaily.days[ .. 6].map (day) ->
       item =
         date: Date(day.forecastStart)
-        icon: day.conditionCode
+        condition: day.conditionCode.toLowerCase()
         temperatureHigh: Math.round(day.temperatureMax)
         temperatureLow: Math.round(day.temperatureMin)
         precipitationProbability: Math.round(day.precipitationChance * 100)

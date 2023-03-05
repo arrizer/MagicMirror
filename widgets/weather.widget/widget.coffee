@@ -29,7 +29,7 @@
       dayName = date.format('dddd')
       dayName = widget.string('today') if dayIndex is 0
       append 'name', dayName
-      icon = $('<div></div>').addClass('icon').css('background-image', "url(/weather/resources/#{day.icon}.png)")
+      icon = $('<div></div>').addClass('icon').css('background-image', "url(/weather/resources/condition_#{day.condition}.png)")
       div.append icon
       append 'temperatureMax', Math.round(day.temperatureHigh) + ' ' + widget.string('unit.temperature.celsius')
       append 'temperatureMin', Math.round(day.temperatureLow) + ' ' + widget.string('unit.temperature.celsius')
