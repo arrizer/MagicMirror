@@ -22,18 +22,17 @@
       return
     dayIndex = 0
     for day in response.days
-      date = window.moment(new Date(parseInt(day.date) * 1000))
+      date = window.moment(new Date(day.date))
       div = $('<div></div>')
       div.addClass 'day'
       append = (cssclass, text) -> $('<div></div>').addClass(cssclass).text(text).appendTo(div)
       dayName = date.format('dddd')
       dayName = widget.string('today') if dayIndex is 0
-      dayName = widget.string('tomorrow') if dayIndex is 1
       append 'name', dayName
-      icon = $('<img></img>').addClass('icon').attr('src', "/weather/resources/#{day.icon}.png")
+      icon = $('<div></div>').addClass('icon').css('background-image', "url(/weather/resources/#{day.icon}.png)")
       div.append icon
-      append 'temperatureMax', Math.round(day.temperatureHigh) + ' ' + widget.string('unit.temperature.' + response.units)
-      append 'temperatureMin', Math.round(day.temperatureLow) + ' ' + widget.string('unit.temperature.' + response.units)
+      append 'temperatureMax', Math.round(day.temperatureHigh) + ' ' + widget.string('unit.temperature.celsius')
+      append 'temperatureMin', Math.round(day.temperatureLow) + ' ' + widget.string('unit.temperature.celsius')
       precipitationEl = append('precipitationProbability', Math.round(day.precipitationProbability) + ' %').addClass("level#{precipitationLevel(day.precipitationProbability)}")
       precipitationEl.css('opacity', 0) if day.precipitationProbability < 1
       container.append(div)

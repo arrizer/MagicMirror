@@ -67,10 +67,15 @@
     {
       "widget": "weather",
       "config": {
-        "darksky_api_key": "xxxxxxxxxx",
-        "latitude": 48.1351,
-        "longitude": 11.582,
-        "units": "celsius"
+        "country": "de",
+        "latitude": 48.1234,
+        "longitude": 11.1234,
+        "authorization": {
+          "teamID": "XXXXXXX",
+          "keyID": "XXXXXXXX",
+          "privateKey": "-----BEGIN PRIVATE KEY-----\nXXXXXXXXX\n-----END PRIVATE KEY-----",
+          "serviceID": "com.example.servicename"
+        }
       }
     },
     {
