@@ -3,17 +3,8 @@
   window.moment.locale(widget.globalConfig.language)
   container.text widget.string('loading')
     
-  precipitationLevel = (percent) ->
-    if percent > 84
-      return 4
-    else if percent > 68
-      return 3
-    else if percent > 52
-      return 2
-    else if percent > 36
-      return 1
-    else
-      return 0
+  precipitationLevel = (amount) ->
+    Math.floor((Math.min(amount, 10.0) / 10.0)  * 4)
   
   widget.loadPeriodic 'forecast', 60 * 10, (error, response) ->
     container.empty()
@@ -33,7 +24,22 @@
       div.append icon
       append 'temperatureMax', Math.round(day.temperatureHigh) + ' ' + widget.string('unit.temperature.celsius')
       append 'temperatureMin', Math.round(day.temperatureLow) + ' ' + widget.string('unit.temperature.celsius')
-      precipitationEl = append('precipitationProbability', Math.round(day.precipitationProbability) + ' %').addClass("level#{precipitationLevel(day.precipitationProbability)}")
-      precipitationEl.css('opacity', 0) if day.precipitationProbability < 1
+      if day.precipitationProbability >= 1 or day.precipitationAmount >= 0.1
+        amountEl = $('<div></div>')
+          .addClass('precipitation')
+          .addClass('amount')
+          .appendTo(div)
+        $('<img/>')
+          .attr('src', "/weather/resources/precipitation_#{precipitationLevel(day.precipitationAmount)}.png")
+          .appendTo(amountEl)
+        $('<span></span>')
+          .text(widget.util.formatNumber(day.precipitationAmount) + ' mm')
+          .appendTo(amountEl)
+        $('<div></div>')
+          .addClass('precipitation')
+          .addClass('probability')
+          .text(Math.round(day.precipitationProbability) + ' %')
+          .appendTo(div)
+        
       container.append(div)
       dayIndex++

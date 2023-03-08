@@ -35,6 +35,7 @@ module.exports = (server) =>
         temperatureHigh: Math.round(day.temperatureMax)
         temperatureLow: Math.round(day.temperatureMin)
         precipitationProbability: Math.round(day.precipitationChance * 100)
+        precipitationAmount: day.precipitationAmount
       return item
     response =
       units: server.config.units

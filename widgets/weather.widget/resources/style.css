@@ -31,33 +31,24 @@
   color: #888;
 }
 
-.weather .container .day .precipitationProbability {
-  font-size: 15px;
+.weather .container .day .precipitation {
+  font-size: 20px;
   color: #00A2FF;
-  background-image: url('/weather/resources/precipitation_0.png');
-  background-size: 15px;
-  background-position: left center;
-  background-repeat: no-repeat;
-  padding-left: 18px;
+}
+
+.weather .container .day .precipitation.amount img {
   display: inline;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
 }
 
-.weather .container .day .precipitationProbability.level0 {
-  background-image: url('/weather/resources/precipitation_0.png');
+.weather .container .day .precipitation.amount span {
+  display: inline;
+  vertical-align: middle;
 }
 
-.weather .container .day .precipitationProbability.level1 {
-  background-image: url('/weather/resources/precipitation_1.png');
-}
-
-.weather .container .day .precipitationProbability.level2 {
-  background-image: url('/weather/resources/precipitation_2.png');
-}
-
-.weather .container .day .precipitationProbability.level3 {
-  background-image: url('/weather/resources/precipitation_3.png');
-}
-
-.weather .container .day .precipitationProbability.level4 {
-  background-image: url('/weather/resources/precipitation_4.png');
+.weather .container .day .precipitation.probability {
+  font-size: 15px;
+  opacity: 0.5;
 }
