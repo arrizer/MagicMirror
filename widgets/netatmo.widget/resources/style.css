@@ -17,6 +17,7 @@
 }
 
 .netatmo .station .metric.prominent {
+  text-align: left;
   float: none;
   padding: 0;
   font-size: 60px;
