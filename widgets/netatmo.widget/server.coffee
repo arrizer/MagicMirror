@@ -4,19 +4,27 @@ module.exports = (server) =>
 
   BASE_URL = 'https://api.netatmo.net'
 
+  keys = ['Temperature', 'CO2', 'Humidity', 'Rain', 'sum_rain_1', 'sum_rain_24', 'WindStrength', 'WindAngle', 'GustStrength', 'GustAngle']
+
   units =
     'Temperature': '°C'
     'Humidity': '%'
     'CO2': 'ppm'
     'Noise': 'db'
     'Pressure': 'mBar'
+    'Rain': 'mm'
+    'sum_rain_1': 'mm/h'
+    'sum_rain_24': 'mm/24h'
+    'WindStrength': 'km/h'
+    'WindAngle': '°'
+    'GustStrength': 'km/h'
+    'GustAngle': '°'
 
   metricsFromDashboardData = (data) ->
     return [] unless data?
-    keys = ['Temperature', 'CO2', 'Humidity']
     metrics = []
     for key in keys when data[key]?
-      value = data[key]
+      value = Math.round(data[key])
       metric =
         type: key
         value: value

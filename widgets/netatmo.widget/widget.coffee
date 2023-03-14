@@ -6,16 +6,17 @@
   COLOR_QUALITY_AVERAGE = (red: 255, green: 147, blue: 0)
   COLOR_QUALITY_WORST = (red: 255, green: 38, blue: 0)
 
+  PROMINENT_METRICS = ['Temperature', 'Rain', 'WindStrength']
+  ANGLE_METRICS = ['WindAngle', 'GustAngle']
+  RAIN_METRICS = ['Rain', 'sum_rain_1', 'sum_rain_24']
+
   icons =
     'Humidity': 'humidity'
     'Noise': 'noise'
     'Pressure': 'pressure'
-
-  addMetric = (div, icon, value, unit) ->
-    secondaryDiv = $('<div/>').addClass('metric').appendTo(div)
-    $('<img/>').addClass('icon').attr('src', '/netatmo/resources/' + icon + '.png').appendTo(secondaryDiv)
-    $('<span/>').addClass('value').text(value).appendTo(secondaryDiv)
-    $('<span/>').addClass('unit').text(unit).appendTo(secondaryDiv)
+    'sum_rain_1': 'rain'
+    'sum_rain_24': 'rain'
+    'GustStrength': 'gust'
 
   mixColors = (color1, color2, percentage) ->
     result =
@@ -39,17 +40,27 @@
       stationDiv = $('<div/>').addClass('station').appendTo(container)
       metricsDiv = $('<div/>').addClass('metrics')
       $('<span/>').addClass('name').text(station.name).appendTo(stationDiv)
+      previousMetricDiv = null
       for metric in station.metrics
-        if metric.type is 'Temperature'
-          $('<div/>').addClass('temperature').text(Math.round(metric.value) + ' °C').appendTo(stationDiv)
+        isAngle = ANGLE_METRICS.indexOf(metric.type) != -1
+        isProminent = PROMINENT_METRICS.indexOf(metric.type) != -1
+        isRain = RAIN_METRICS.indexOf(metric.type) != -1
+        if isAngle
+          compassDiv = $('<div/>').addClass('compass').appendTo(previousMetricDiv)
+          $('<div/>').addClass('needle').css('transform' , "rotate(#{metric.value}deg)").appendTo(compassDiv)
         else
-          metricDiv = $('<div/>').addClass('metric').appendTo(metricsDiv)
+          parentDiv = if isProminent then stationDiv else metricsDiv
+          metricDiv = $('<div/>').addClass('metric').addClass(metric.type.toLowerCase()).appendTo(parentDiv)
+          previousMetricDiv = metricDiv
+          metricDiv.addClass('prominent') if isProminent
           icon = icons[metric.type]
           if icon?
             $('<img/>').addClass('icon').attr('src', "/netatmo/resources/#{icon}.png").appendTo(metricDiv)
           if metric.quality?
             color = colorFromQuality(metric.quality)
             $('<div/>').addClass('quality').css('background-color', "rgb(#{color.red},#{color.green},#{color.blue})").appendTo(metricDiv)
+          if isRain and metric.value <= 0
+            metricDiv.css('opacity', 0.5)
           $('<span/>').addClass('value').text(metric.value).appendTo(metricDiv)
           $('<span/>').addClass('unit').text(metric.unit).appendTo(metricDiv)
       metricsDiv.appendTo(stationDiv)

@@ -4,7 +4,7 @@
 
 .netatmo .station {
   display: inline-block;
-  width: 250px;
+  width: 240px;
   height: 100%;
   vertical-align: top;
   text-align: left;
@@ -16,8 +16,11 @@
   color: #AAA;
 }
 
-.netatmo .station .temperature {
+.netatmo .station .metric.prominent {
+  float: none;
+  padding: 0;
   font-size: 60px;
+  height: auto;
 }
 
 .netatmo .station .metrics {
@@ -36,7 +39,6 @@
 
 .netatmo .station .metric .icon {
   height: 16px;
-  width: 16px;
   margin-top: 4px;
   display: inline-block;
   float: left;
@@ -56,6 +58,39 @@
   padding: 0 5px;
 }
 
+.netatmo .metric.prominent .value {
+  padding: 0 5px 0 0;
+}
+
+.netatmo .metric.prominent .unit {
+  font-size: 40px;
+}
+
 .netatmo .metric .unit {
-  
+  font-size: 20px;
+}
+
+.netatmo .metric .compass {
+  display: inline-block;
+  width: 21px;
+  height: 21px;
+  border: 2px solid white;
+  border-radius:  12.5px;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+.netatmo .metric.prominent .compass {
+  width: 28px;
+  height: 28px;
+  border-width: 4px;
+  border-radius: 18px;
+}
+
+.netatmo .metric .compass .needle {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: url('/netatmo/resources/needle.png') no-repeat;
+  background-size: contain;
 }
