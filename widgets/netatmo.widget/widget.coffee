@@ -6,16 +6,15 @@
   COLOR_QUALITY_AVERAGE = (red: 255, green: 147, blue: 0)
   COLOR_QUALITY_WORST = (red: 255, green: 38, blue: 0)
 
-  PROMINENT_METRICS = ['Temperature', 'Rain', 'WindStrength']
+  PROMINENT_METRICS = ['Temperature', 'sum_rain_24', 'WindStrength']
   ANGLE_METRICS = ['WindAngle', 'GustAngle']
-  RAIN_METRICS = ['Rain', 'sum_rain_1', 'sum_rain_24']
+  RAIN_METRICS = ['sum_rain_24', 'sum_rain_1']
 
   icons =
     'Humidity': 'humidity'
     'Noise': 'noise'
     'Pressure': 'pressure'
     'sum_rain_1': 'rain'
-    'sum_rain_24': 'rain'
     'GustStrength': 'gust'
 
   mixColors = (color1, color2, percentage) ->

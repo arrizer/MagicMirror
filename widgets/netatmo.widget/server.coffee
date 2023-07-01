@@ -4,7 +4,7 @@ module.exports = (server) =>
 
   BASE_URL = 'https://api.netatmo.net'
 
-  keys = ['Temperature', 'CO2', 'Humidity', 'Rain', 'sum_rain_1', 'sum_rain_24', 'WindStrength', 'WindAngle', 'GustStrength', 'GustAngle']
+  keys = ['Temperature', 'CO2', 'Humidity', 'sum_rain_1', 'sum_rain_24', 'WindStrength', 'WindAngle', 'GustStrength']
 
   units =
     'Temperature': '°C'
@@ -12,9 +12,8 @@ module.exports = (server) =>
     'CO2': 'ppm'
     'Noise': 'db'
     'Pressure': 'mBar'
-    'Rain': 'mm'
     'sum_rain_1': 'mm/h'
-    'sum_rain_24': 'mm/24h'
+    'sum_rain_24': 'mm'
     'WindStrength': 'km/h'
     'WindAngle': '°'
     'GustStrength': 'km/h'

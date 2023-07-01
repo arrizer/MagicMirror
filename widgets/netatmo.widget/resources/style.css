@@ -4,7 +4,7 @@
 
 .netatmo .station {
   display: inline-block;
-  width: 240px;
+  width: 200px;
   height: 100%;
   vertical-align: top;
   text-align: left;
@@ -73,10 +73,10 @@
 
 .netatmo .metric .compass {
   display: inline-block;
-  width: 21px;
-  height: 21px;
+  width: 16px;
+  height: 16px;
   border: 2px solid white;
-  border-radius:  12.5px;
+  border-radius:  10px;
   vertical-align: middle;
   margin-left: 5px;
 }
