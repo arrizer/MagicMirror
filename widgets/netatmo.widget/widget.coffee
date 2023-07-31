@@ -60,6 +60,9 @@
             $('<div/>').addClass('quality').css('background-color', "rgb(#{color.red},#{color.green},#{color.blue})").appendTo(metricDiv)
           if isRain and metric.value <= 0
             metricDiv.css('opacity', 0.5)
-          $('<span/>').addClass('value').text(metric.value).appendTo(metricDiv)
+          value = metric.value
+          unless isRain
+            value = Math.round(value)
+          $('<span/>').addClass('value').text(widget.util.formatNumber(value)).appendTo(metricDiv)
           $('<span/>').addClass('unit').text(metric.unit).appendTo(metricDiv)
       metricsDiv.appendTo(stationDiv)

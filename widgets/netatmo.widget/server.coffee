@@ -23,7 +23,7 @@ module.exports = (server) =>
     return [] unless data?
     metrics = []
     for key in keys when data[key]?
-      value = Math.round(data[key])
+      value = data[key]
       metric =
         type: key
         value: value
@@ -66,14 +66,12 @@ module.exports = (server) =>
         refresh_token: tokens.refreshToken
         grant_type: 'refresh_token'
     else
-      log.info "Obtaining refresh token with credentials"
+      log.info "Using refresh token from configuration"
       form =
         client_id: server.config.auth.client_id
         client_secret: server.config.auth.client_secret
-        username: server.config.auth.username
-        password: server.config.auth.password
-        scope: 'read_station'
-        grant_type: 'password'
+        refresh_token: server.config.auth.refresh_token
+        grant_type: 'refresh_token'
     body = await server.http.postForm("#{BASE_URL}/oauth2/token", form)
     now = new Date()
     tokens = {} unless tokens?
