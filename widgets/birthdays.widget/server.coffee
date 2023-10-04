@@ -25,18 +25,17 @@ module.exports = (server) =>
 
   parseVCard = (vcard) ->
     contact = {}
-    properties = {}
     regexp = /([^:;]+);?([^:]*?)\:([^\n]+)\r\n/g
+    name = null
+    birthday = null
     while match = regexp.exec(vcard)
       key = match[1]
-      properties[key] =
-        arguments: match[2]
-        value: match[3]
-    name = properties['FN']
-    birthday = properties['BDAY']
+      name = match[3] if key is 'FN'
+      birthday = match[3] if key is 'BDAY'
+      break if name? and birthday?
     throw new Error("No full name found in #{vcard}") unless name?
-    contact.name = name.value
-    if birthday? and match = /(\d{4})\-(\d{2})\-(\d{2})/.exec(birthday.value)
+    contact.name = name
+    if birthday? and match = /(\d{4})\-(\d{2})\-(\d{2})/.exec(birthday)
       contact.birthday = new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]))
     return contact
 
