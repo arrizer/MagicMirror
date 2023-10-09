@@ -45,7 +45,7 @@ module.exports = (server) =>
       now = new Date()
       body = body.filter (departure) -> 
         departureDate = new Date(parseInt(departure.realtimeDepartureTime))
-        return (departureDate - now) <= MAX_DEPARTURE
+        return (departureDate >= now) and ((departureDate - now) <= MAX_DEPARTURE)
       result =
         station: station.station
         walkingDistanceMinutes: station.walkingDistanceMinutes
