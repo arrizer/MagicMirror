@@ -61,8 +61,12 @@
           if isRain and metric.value <= 0
             metricDiv.css('opacity', 0.5)
           value = metric.value
-          unless isRain
+          minimumFractionDigits = 0
+          if isRain
+            minimumFractionDigits = 1 if value > 0
+            value = Math.round(value * 10) / 10
+          else
             value = Math.round(value)
-          $('<span/>').addClass('value').text(widget.util.formatNumber(value)).appendTo(metricDiv)
+          $('<span/>').addClass('value').text(widget.util.formatNumber(value, (minimumFractionDigits: minimumFractionDigits))).appendTo(metricDiv)
           $('<span/>').addClass('unit').text(metric.unit).appendTo(metricDiv)
       metricsDiv.appendTo(stationDiv)
