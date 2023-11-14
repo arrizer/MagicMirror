@@ -2,7 +2,7 @@
   container = widget.div.find('.container')
   container.text widget.string("loading")
 
-  widget.loadPeriodic 'departures', 15, (error, responses) ->
+  widget.loadPeriodic 'departures', 30, (error, responses) ->
     container.empty()
     if error?
       container.text(error)
