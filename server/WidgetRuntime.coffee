@@ -7,7 +7,7 @@ Widget = require './Widget'
 Log = require './Log'
 
 module.exports = class WidgetRuntime
-  constructor: (@widgetsDirectory, @clientScriptPath, @config) ->
+  constructor: (@widgetsDirectory, @clientScriptPath, @storagePath, @config) ->
     @log = new Log("WidgetRuntime")
     @widgets = {}
     @widgetInstances = []
@@ -38,7 +38,7 @@ module.exports = class WidgetRuntime
       widget = @widgets[config.widget]
       throw new Error("Unknown widget: #{config.widget}") unless widget?
       id = instanceCounts[config.widget] or 0
-      instance = widget.instantiate(config.config, id)
+      instance = widget.instantiate(config.config, id, @storagePath)
       instanceCounts[config.widget] = id + 1
       @router.use '/' + instance.id, instance.router.routes()
       await instance.init()

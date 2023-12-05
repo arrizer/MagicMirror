@@ -33,7 +33,7 @@ module.exports = class Server
   
   start: ->
     @displayController = new DisplayController()
-    @runtime = new WidgetRuntime(Path.join(@config.path, 'widgets'), Path.join(@config.path, 'server', 'client', 'client.coffee'), @config)
+    @runtime = new WidgetRuntime(Path.join(@config.path, 'widgets'), Path.join(@config.path, 'server', 'client', 'client.coffee'), Path.join(@config.path, 'storage'), @config)
     onlyWidget = @args['only-widget']
     await @runtime.load(onlyWidget)
     widgets = @config.widgets

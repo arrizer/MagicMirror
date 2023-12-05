@@ -2,16 +2,18 @@ KoaRouter = require 'koa-router'
 Path = require 'path'
 
 Log = require './Log'
+Storage = require './Storage'
 HTTPClient = require './HTTPClient'
 
 module.exports = class WidgetInstance
-  constructor: (@widget, @config, id) ->
+  constructor: (@widget, @config, id, storagePath) ->
     @id = @widget.info.name + '/' + id
     @log = new Log("Widget #{@id}")
     @log.debug "Creating widget instance"
     @endpoints = {}
     @router = new KoaRouter()
     @httpClient = new HTTPClient(@log)
+    @storage = new Storage(storagePath, "#{@widget.info.name}.#{id}")
     @server =
       log:
         debug: (message) => @log.debug(message.toString())
@@ -26,6 +28,9 @@ module.exports = class WidgetInstance
         index = 1
         string = string.replace '%' + index++, placeholder for placeholder in placeholders
         return string
+      storage:
+        get: (key) => @storage.get(key)
+        set: (key, value) => @storage.set(key, value)
       init: ->
         Promise.resolve()
     try
@@ -56,5 +61,3 @@ module.exports = class WidgetInstance
         catch error
           @log.error "Responding to #{path} with error: #{error}"
           ctx.body = (success: no, error: "#{error}")
-
-  

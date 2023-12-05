@@ -66,18 +66,20 @@ module.exports = (server) =>
         refresh_token: tokens.refreshToken
         grant_type: 'refresh_token'
     else
-      log.info "Using refresh token from configuration"
+      log.info "Using refresh token from configuration or storage"
       form =
         client_id: server.config.auth.client_id
         client_secret: server.config.auth.client_secret
-        refresh_token: server.config.auth.refresh_token
+        refresh_token: server.storage.get('refreshToken') or server.config.auth.refresh_token
         grant_type: 'refresh_token'
     body = await server.http.postForm("#{BASE_URL}/oauth2/token", form)
     now = new Date()
+    console.log body
     tokens = {} unless tokens?
     tokens.accessToken = body.access_token
     tokens.refreshToken = body.refresh_token
     tokens.accessTokenExpiration = new Date(now.getTime() + (body.expires_in * 1000))
+    server.storage.set('refreshToken', tokens.refreshToken)
     return tokens.accessToken
 
   getStationsData = ->

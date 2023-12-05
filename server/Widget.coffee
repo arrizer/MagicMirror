@@ -75,5 +75,5 @@ module.exports = class Widget
       if stats.isFile()
         @serverFactory = require(@path + '/server') 
 
-  instantiate: (config, instanceID) ->
-    new WidgetInstance(@, config, instanceID)
+  instantiate: (config, instanceID, storagePath) ->
+    new WidgetInstance(@, config, instanceID, storagePath)
