@@ -39,7 +39,12 @@ module.exports = class Server
     widgets = @config.widgets
     if onlyWidget?
       widgets = widgets.filter((item) => item.widget == onlyWidget)
-    await @runtime.startWidgets(widgets)
+    try
+      await @runtime.startWidgets(widgets)
+    catch error
+      @log.error "Failed to start widgets. Shutting down"
+      process.exit(128)
+      return
     @app.use @runtime.router.routes()
     @app.use @displayController.router.routes()
     @startServer()
