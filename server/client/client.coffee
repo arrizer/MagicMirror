@@ -36,6 +36,10 @@ $ ->
             template.css('opacity', if !error? then '1' else '0.3')
             timeout = if !error? then seconds else 1
             errorOverlay.text(if error? then error.message else '')
+            if error?
+              errorOverlay.show()
+            else
+              errorOverlay.hide()
             clearTimeout(scheduledPeriodicLoad) if scheduledPeriodicLoad?
             scheduledPeriodicLoad = setTimeout (-> widget.loadPeriodic(endpoint, seconds, next)), 1000 * timeout
           widget.load endpoint, (error, response) ->

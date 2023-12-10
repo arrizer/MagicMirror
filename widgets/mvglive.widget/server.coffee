@@ -31,13 +31,15 @@ module.exports = (server) =>
         return result.globalId
     throw new Error("Did not find a station for query: '#{query}'")
 
-  server.init = ->
+  setup = ->
+    return if stations.length > 0
     for item in server.config.stations
       throw new Error("Missing 'station' parameter in config") unless item.station?
       item.stationID = await findStationID(item.station) unless item.stationID?
       stations.push(item)
 
   server.handle 'departures', (query) ->
+    await setup()
     config = server.config
     results = []
     for station in stations
