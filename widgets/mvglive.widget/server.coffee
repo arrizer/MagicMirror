@@ -18,6 +18,7 @@ LINE_COLORS =
 
 MAX_DEPARTURE = 2 * 60 * 60 * 1000 # 2 hours
 API_KEY = '6y5ND70iERyaZ'
+USER_AGENT = 'fahrinfo/1101 CFNetwork/1490.0.4 Darwin/23.2.0'
 
 module.exports = (server) =>
   log = server.log
@@ -30,6 +31,7 @@ module.exports = (server) =>
       url: "https://fahrinfo-backend-prod.web.azrapp.swm.de/rest/v2/#{endpoint}?#{query}"
       headers:
         'Api_key': API_KEY
+        'User-Agent': USER_AGENT
       responseContentType: 'json'
 
   findStationID = (query) ->
