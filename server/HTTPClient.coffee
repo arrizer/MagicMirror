@@ -73,5 +73,5 @@ module.exports = class HTTPClient
         @log.debug "Response: #{JSON.stringify(response, null, 2)}"
       return response
     catch error
-      @log.error "Error loading #{options.method} #{options.url}: #{error}"
+      @log.error "Error loading #{options.method or 'GET'} #{options.url}: #{error}"
       throw error

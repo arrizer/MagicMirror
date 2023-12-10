@@ -17,17 +17,26 @@ LINE_COLORS =
   'S20': '#ED6B83'
 
 MAX_DEPARTURE = 2 * 60 * 60 * 1000 # 2 hours
+API_KEY = '6y5ND70iERyaZ'
 
 module.exports = (server) =>
   log = server.log
 
   stations = []
 
+  performAPIRequest = (endpoint, query) ->
+    query = new URLSearchParams(query).toString()
+    return await server.http.request
+      url: "https://fahrinfo-backend-prod.web.azrapp.swm.de/rest/v2/#{endpoint}?#{query}"
+      headers:
+        'Api_key': API_KEY
+      responseContentType: 'json'
+
   findStationID = (query) ->
     log.info "Finding stationID for '#{query}'"
-    results = await server.http.getJSON "https://www.mvg.de/api/fib/v2/location?query=#{encodeURIComponent(query)}"
+    results = await performAPIRequest('location', (query: query, locationTypes: 'STATION'))
     for result in results
-      if result.type is 'STATION'
+      if result.globalId?
         return result.globalId
     throw new Error("Did not find a station for query: '#{query}'")
 
@@ -43,7 +52,7 @@ module.exports = (server) =>
     config = server.config
     results = []
     for station in stations
-      body = await server.http.getJSON "https://www.mvg.de/api/fib/v2/departure?globalId=#{station.stationID}&limit=20"
+      body = await performAPIRequest('departure', (globalId: station.stationID))
       now = new Date()
       body = body.filter (departure) -> 
         departureDate = new Date(parseInt(departure.realtimeDepartureTime))
